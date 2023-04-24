@@ -46,6 +46,9 @@ extern "C" {
         rlImGuiSetup(true);
         SetupImGuiStyle();
 
+        ImGuiIO& io = ImGui::GetIO();
+        io.FontGlobalScale = 2;
+
         CanvasManager::getInstance().StartLoop(draw);
         
         CloseWindow();

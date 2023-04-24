@@ -15,6 +15,10 @@ EM_JS(float, body_get_height, (), {
     return document.body.clientHeight;
 });
 
+EM_JS(float, get_window_dpi, (), {
+    return window.devicePixelRatio;
+});
+
 EM_BOOL onWindowResize(int eventType, const EmscriptenUiEvent* uiEvent, void* userData) {
     CanvasManager::getInstance().Resize();
     return EM_TRUE;
@@ -46,9 +50,11 @@ void CanvasManager::Resize() {
         width = targetWidth * (bodyAspect / targetAspect);
     }
 
+    float dpi = get_window_dpi();
+
     SetWindowSize(
-        static_cast<int>(width),
-        static_cast<int>(height)
+        static_cast<int>(width * dpi),
+        static_cast<int>(height * dpi)
     );
 }
 
