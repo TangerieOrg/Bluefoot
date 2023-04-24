@@ -1,25 +1,22 @@
 #pragma once
-#define PLATFORM Web
-
-#include <stdexcept>
-#include <stdio.h>
-
-#include "globals.hpp"
-
-#include <emscripten/emscripten.h>
-#include <emscripten/html5.h>
 #include "raylib.h"
+#include "singleton.hpp"
 
 typedef void(*bf_draw_frame_callback)(void);
 
-class CanvasManager {
+class CanvasManager : public Singleton<CanvasManager> {
+    friend class Singleton<CanvasManager>;
 private:
+    CanvasManager() {};
+    ~CanvasManager() {};
+
     bool isRunning = false;
     bf_draw_frame_callback frameDrawer;
+    float targetWidth;
+    float targetHeight;
 
 public:
-
-    CanvasManager();
+    void Init(Vector2 targetSize);
     void Resize();
     void StartLoop(bf_draw_frame_callback drawer);
     void Frame();

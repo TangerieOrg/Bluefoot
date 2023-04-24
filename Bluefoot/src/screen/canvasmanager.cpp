@@ -1,33 +1,54 @@
 #include "canvasmanager.hpp"
 #include "imgui.h"
 #include "rlImGui.h"
+#include <stdexcept>
+#include <stdio.h>
 
-EM_JS(int, body_get_width, (), {
+#include <emscripten/emscripten.h>
+#include <emscripten/html5.h>
+
+EM_JS(float, body_get_width, (), {
     return document.body.clientWidth;
 });
 
-EM_JS(int, body_get_height, (), {
+EM_JS(float, body_get_height, (), {
     return document.body.clientHeight;
 });
 
 EM_BOOL onWindowResize(int eventType, const EmscriptenUiEvent* uiEvent, void* userData) {
-    global.canvas->Resize();
+    CanvasManager::getInstance().Resize();
     return EM_TRUE;
 }
 
 void main_loop(void) {
-    global.canvas->Frame();
+    CanvasManager::getInstance().Frame();
 }
 
-CanvasManager::CanvasManager() {
-    InitWindow(body_get_width(), body_get_height(), "");
+void CanvasManager::Init(Vector2 size) {
+    targetWidth = size.x;
+    targetHeight = size.y;
+    
+    InitWindow(targetWidth, targetHeight, "");
     emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, NULL, true, onWindowResize);
+    this->Resize();
 }
 
 void CanvasManager::Resize() {
+    float targetAspect = targetWidth / targetHeight;
+    float bodyAspect = body_get_width() / body_get_height();
+
+    float width = targetWidth;
+    float height = targetHeight;
+
+    if(bodyAspect > targetAspect) {
+        height = targetHeight * (targetAspect / bodyAspect);
+    } else {
+        width = targetWidth * (bodyAspect / targetAspect);
+    }
+
     SetWindowSize(
-        body_get_width(),
-        body_get_height()
+        static_cast<int>(width),
+        static_cast<int>(height)
     );
 }
 

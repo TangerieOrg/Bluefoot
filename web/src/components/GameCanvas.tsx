@@ -7,10 +7,12 @@ export default function GameCanvas() {
 
     useEffect(() => {
         if(!instance) return;
-
         instance.start();
 
-        return () => instance.end();
+        return () => {
+            console.log("Instance Removed");
+            instance.end()
+        };
     }, [instance]);
 
     return <canvas 

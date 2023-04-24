@@ -4,8 +4,6 @@
 #include <stdexcept>
 #include <stdio.h>
 
-#include "globals.hpp"
-
 #include <emscripten/emscripten.h>
 #include <emscripten/html5.h>
 #include "raylib.h"
@@ -15,15 +13,9 @@
 
 #include "imgui.h"
 #include "rlImGui.h"
-
-Global global;
+#include "ui.hpp"
 
 void NullLogger(int msgType, const char *text, va_list args) {}
-
-void setupGlobals() {
-    auto canvas = CanvasManager();
-    global.canvas = &canvas;
-}
 
 void drawFPS() {
     DrawText(TextFormat("FPS = %i", GetFPS()), 15, 15, 30, WHITE);
@@ -49,10 +41,12 @@ extern "C" {
         emscripten_sleep(1);
         printf("Bluefoot Starting...\n");
 
-        setupGlobals();
+        CanvasManager::getInstance().Init(Vector2{1920, 1080});
+
         rlImGuiSetup(true);
-        global.canvas->StartLoop(draw);
-        
+        SetupImGuiStyle();
+
+        CanvasManager::getInstance().StartLoop(draw);
         
         CloseWindow();
     }
@@ -60,7 +54,7 @@ extern "C" {
     EMSCRIPTEN_KEEPALIVE
     void end() {
         rlImGuiShutdown();
-        global.canvas->EndLoop();
+        CanvasManager::getInstance().EndLoop();
         printf("Bluefoot Ending...\n");
     }
 }

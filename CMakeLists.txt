@@ -8,15 +8,12 @@ project(
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/web/res")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/web/res")
 
-set(EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/web/res")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${EXECUTABLE_OUTPUT_PATH}")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${EXECUTABLE_OUTPUT_PATH}")
-
-set(COMMON_C_CXX_FLAGS "-sUSE_GLFW=3 -sASSERTIONS=1 -sWASM=1 -sASYNCIFY -sALLOW_MEMORY_GROWTH -sMODULARIZE=1 -sENVIRONMENT=web -sEXPORTED_RUNTIME_METHODS=ccall,cwrap,run -sEXIT_RUNTIME=1")
-set(COMMON_C_CXX_FLAGS_RELEASE "-O2")
-set(COMMON_C_CXX_FLAGS_DEBUG "-O0")
+set(COMMON_C_CXX_FLAGS "-sUSE_GLFW=3 -sASSERTIONS=1 -sWASM=1 -sASYNCIFY -sALLOW_MEMORY_GROWTH=1 -sMODULARIZE=1 -sENVIRONMENT=web -sEXPORTED_RUNTIME_METHODS=ccall,cwrap,run -sEXIT_RUNTIME=1 -Wno-limited-postlink-optimizations")
+set(COMMON_C_CXX_FLAGS_RELEASE "-O3")
+set(COMMON_C_CXX_FLAGS_DEBUG "-g")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMMON_C_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_C_CXX_FLAGS}")
@@ -28,6 +25,12 @@ set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${COMMON_C_CXX_FLAGS_RELEASE
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${COMMON_C_CXX_FLAGS_DEBUG}")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${COMMON_C_CXX_FLAGS_DEBUG}")
 
-add_compile_options("-Wno-unused-command-line-argument" "-Wno-deprecated-enum-compare-conditional" "-Wno-limited-postlink-optimizations")
+add_compile_options(
+    "-Wno-unused-command-line-argument" 
+    "-Wno-deprecated-enum-compare-conditional" 
+    "-Wno-limited-postlink-optimizations"
+    # TODO How to remove in prod?
+    "-g"
+)
 
 add_subdirectory(Bluefoot)
