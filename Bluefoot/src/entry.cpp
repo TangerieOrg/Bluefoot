@@ -9,11 +9,11 @@
 #include "raylib.h"
 
 #include "entry.hpp"
-#include "screen/canvasmanager.hpp"
+#include "screen/displaymanager.hpp"
 
 #include "imgui.h"
 #include "rlImGui.h"
-#include "ui.hpp"
+#include "ui/consolewindow.hpp"
 
 void NullLogger(int msgType, const char *text, va_list args) {}
 
@@ -22,13 +22,8 @@ void drawFPS() {
 }
 
 
-void testDraw() {
-    ImGui::Begin("Hello World");
-    ImGui::End();    
-}
-
 void draw() {
-    testDraw();
+    UI::ConsoleWindow::getInstance().draw();
     drawFPS();
 }
 
@@ -40,24 +35,22 @@ extern "C" {
         // Its required for some reason
         emscripten_sleep(1);
         printf("Bluefoot Starting...\n");
+        debug("Test Line");
+        debug("Test Line 1");
+        debug("Test Line 2");
+        debug("Test Line 3");
+        debug("TestLog {}", 43);
 
-        CanvasManager::getInstance().Init(Vector2{1920, 1080});
+        DisplayManager::getInstance().init(Vector2{1920*2, 1080*2}, 2);
+        DisplayManager::getInstance().startLoop(draw);
 
-        rlImGuiSetup(true);
-        SetupImGuiStyle();
-
-        ImGuiIO& io = ImGui::GetIO();
-        io.FontGlobalScale = 2;
-
-        CanvasManager::getInstance().StartLoop(draw);
-        
         CloseWindow();
     }
 
     EMSCRIPTEN_KEEPALIVE
     void end() {
         rlImGuiShutdown();
-        CanvasManager::getInstance().EndLoop();
+        DisplayManager::getInstance().endLoop();
         printf("Bluefoot Ending...\n");
     }
 }

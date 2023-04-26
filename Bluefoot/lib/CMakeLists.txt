@@ -10,7 +10,7 @@ target_sources(IMGUI PRIVATE
     ${IMGUI_DIR}/imgui.cpp
 )
 
-target_include_directories(IMGUI PUBLIC ${IMGUI_DIR} ${IMGUI_DIR}/backends)
+target_include_directories(IMGUI PUBLIC ${IMGUI_DIR})
 
 # rlImGui
 set(R_IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/rlImGui)
@@ -19,3 +19,6 @@ add_library(rlImGui STATIC)
 target_sources(rlImGui PRIVATE ${R_IMGUI_DIR}/rlImGui.cpp)
 target_link_libraries(rlImGui raylib IMGUI)
 target_include_directories(rlImGui PUBLIC ${R_IMGUI_DIR})
+
+# fmt
+add_subdirectory(fmt)

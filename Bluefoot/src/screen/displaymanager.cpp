@@ -1,11 +1,13 @@
-#include "canvasmanager.hpp"
-#include "imgui.h"
-#include "rlImGui.h"
+#include "displaymanager.hpp"
 #include <stdexcept>
 #include <stdio.h>
 
 #include <emscripten/emscripten.h>
 #include <emscripten/html5.h>
+
+#include "imgui.h"
+#include "rlImGui.h"
+#include "ui/imgui_theme.hpp"
 
 EM_JS(float, body_get_width, (), {
     return document.body.clientWidth;
@@ -20,24 +22,35 @@ EM_JS(float, get_window_dpi, (), {
 });
 
 EM_BOOL onWindowResize(int eventType, const EmscriptenUiEvent* uiEvent, void* userData) {
-    CanvasManager::getInstance().Resize();
+    DisplayManager::getInstance().resize();
     return EM_TRUE;
 }
 
 void main_loop(void) {
-    CanvasManager::getInstance().Frame();
+    DisplayManager::getInstance().frame();
 }
 
-void CanvasManager::Init(Vector2 size) {
+void DisplayManager::init(Vector2 size, float scale) {
     targetWidth = size.x;
     targetHeight = size.y;
-    
+    displayScale = scale;
+
     InitWindow(targetWidth, targetHeight, "");
     emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, NULL, true, onWindowResize);
-    this->Resize();
+    this->resize();
+
+    rlImGuiSetup(true);
+
+    this->updateScale();
 }
 
-void CanvasManager::Resize() {
+void DisplayManager::updateScale() {
+    SetupImGuiStyle(this->displayScale);
+    ImGuiIO& io = ImGui::GetIO();
+    io.FontGlobalScale = BASE_FONT_SCALE * this->displayScale;
+}
+
+void DisplayManager::resize() {
     float targetAspect = targetWidth / targetHeight;
     float bodyAspect = body_get_width() / body_get_height();
 
@@ -58,7 +71,7 @@ void CanvasManager::Resize() {
     );
 }
 
-void CanvasManager::StartLoop(bf_draw_frame_callback drawer) {
+void DisplayManager::startLoop(bf_draw_frame_callback drawer) {
     if(this->isRunning) {
         throw std::runtime_error("Canvas Manager is already running");
     }
@@ -67,7 +80,7 @@ void CanvasManager::StartLoop(bf_draw_frame_callback drawer) {
     emscripten_set_main_loop(main_loop, 0, true);
 }
 
-void CanvasManager::Frame() {
+void DisplayManager::frame() {
     BeginDrawing();
     rlImGuiBegin();
     ClearBackground(BLACK);
@@ -76,7 +89,14 @@ void CanvasManager::Frame() {
     EndDrawing();
 }
 
-void CanvasManager::EndLoop() {
+void DisplayManager::endLoop() {
     emscripten_cancel_main_loop();
     this->isRunning = false;
+}
+
+void DisplayManager::setDisplayScale(float scale) {
+    if(scale != this->displayScale) {
+        this->displayScale = scale;
+        this->updateScale();
+    }
 }

@@ -1,38 +1,38 @@
 #pragma once
 #include "imgui.h"
 
-void SetupImGuiStyle()
+void SetupImGuiStyle(float scale)
 {
 	// Bluefoot style from ImThemes
 	ImGuiStyle& style = ImGui::GetStyle();
-	
+
 	style.Alpha = 1.0f;
 	style.DisabledAlpha = 0.6000000238418579f;
-	style.WindowPadding = ImVec2(6.0f, 3.0f);
+	style.WindowPadding = ImVec2(6.0f * scale, 3.0f * scale);
 	style.WindowRounding = 0.0f;
 	style.WindowBorderSize = 1.0f;
-	style.WindowMinSize = ImVec2(32.0f, 32.0f);
+	style.WindowMinSize = ImVec2(32.0f * scale, 32.0f * scale);
 	style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
 	style.WindowMenuButtonPosition = ImGuiDir_Left;
 	style.ChildRounding = 0.0f;
 	style.ChildBorderSize = 1.0f;
 	style.PopupRounding = 0.0f;
 	style.PopupBorderSize = 1.0f;
-	style.FramePadding = ImVec2(5.0f, 1.0f);
+	style.FramePadding = ImVec2(5.0f * scale, 1.0f * scale);
 	style.FrameRounding = 3.0f;
 	style.FrameBorderSize = 1.0f;
-	style.ItemSpacing = ImVec2(8.0f, 4.0f);
-	style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
-	style.CellPadding = ImVec2(4.0f, 2.0f);
-	style.IndentSpacing = 21.0f;
-	style.ColumnsMinSpacing = 6.0f;
-	style.ScrollbarSize = 13.0f;
+	style.ItemSpacing = ImVec2(8.0f * scale, 4.0f * scale);
+	style.ItemInnerSpacing = ImVec2(4.0f * scale, 4.0f * scale);
+	style.CellPadding = ImVec2(4.0f * scale, 2.0f * scale);
+	style.IndentSpacing = 21.0f * scale;
+	style.ColumnsMinSpacing = 6.0f * scale;
+	style.ScrollbarSize = 13.0f * scale;
 	style.ScrollbarRounding = 16.0f;
-	style.GrabMinSize = 20.0f;
+	style.GrabMinSize = 20.0f * scale;
 	style.GrabRounding = 2.0f;
 	style.TabRounding = 4.0f;
 	style.TabBorderSize = 1.0f;
-	style.TabMinWidthForCloseButton = 0.0f;
+	style.TabMinWidthForCloseButton = 0.0f * scale;
 	style.ColorButtonPosition = ImGuiDir_Right;
 	style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
 	style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
