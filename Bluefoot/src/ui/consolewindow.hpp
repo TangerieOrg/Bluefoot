@@ -16,7 +16,7 @@ private:
     ~ConsoleWindow() {};
 
     std::vector<std::string> lines;
-    float initialWidth = 800;
+    float initialWidth = 400;
 public:
     void add_line(std::string line);
     void draw();

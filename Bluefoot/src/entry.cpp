@@ -36,7 +36,7 @@ extern "C" {
         emscripten_sleep(1);
         debug("Bluefoot Starting...");
 
-        DisplayManager::getInstance().init(Vector2{1920*2, 1080*2}, 2);
+        DisplayManager::getInstance().init(Vector2{1920, 1080}, 1);
         DisplayManager::getInstance().startLoop(draw);
 
         CloseWindow();
