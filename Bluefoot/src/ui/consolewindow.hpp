@@ -16,7 +16,7 @@ private:
     ~ConsoleWindow() {};
 
     std::vector<std::string> lines;
-    ImVec2 size = ImVec2(800, 1200);
+    float initialWidth = 800;
 public:
     void add_line(std::string line);
     void draw();

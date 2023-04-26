@@ -34,12 +34,7 @@ extern "C" {
         SetTraceLogCallback(NullLogger);
         // Its required for some reason
         emscripten_sleep(1);
-        printf("Bluefoot Starting...\n");
-        debug("Test Line");
-        debug("Test Line 1");
-        debug("Test Line 2");
-        debug("Test Line 3");
-        debug("TestLog {}", 43);
+        debug("Bluefoot Starting...");
 
         DisplayManager::getInstance().init(Vector2{1920*2, 1080*2}, 2);
         DisplayManager::getInstance().startLoop(draw);
