@@ -1,5 +1,9 @@
 #pragma once
 
+#define SINGLETON_FUNCTIONS(name) \
+    name() {}; \
+    ~name() {};
+
 template <typename T>
 class Singleton {
 public:

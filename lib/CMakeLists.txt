@@ -1,3 +1,5 @@
+find_package(raylib 3.0 CONFIG REQUIRED)
+
 # IMGUI
 set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
 add_library(IMGUI STATIC)

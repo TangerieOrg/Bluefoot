@@ -15,20 +15,21 @@
 #include "rlImGui.h"
 #include "ui/consolewindow.hpp"
 
+#include <iostream>
+#include <streambuf>
+
+#include "node/pin.hpp"
+
 void NullLogger(int msgType, const char *text, va_list args) {}
 
 void drawFPS() {
-    DrawText(TextFormat("FPS = %i", GetFPS()), 15, 15, 30, WHITE);
+    DrawText(TextFormat("%i", GetFPS()), 15, 15, 30, WHITE);
 }
-
 
 void draw() {
     UI::ConsoleWindow::getInstance().draw();
     drawFPS();
-    // ImGui::BeginTabBar("TestTab");
-    // ImGui::EndTabBar();
 }
-
 
 extern "C" {
     EMSCRIPTEN_KEEPALIVE
@@ -39,6 +40,7 @@ extern "C" {
         debug("Bluefoot Starting...");
 
         DisplayManager::getInstance().init(Vector2{1920, 1080}, 1);
+        
         DisplayManager::getInstance().startLoop(draw);
 
         CloseWindow();
@@ -46,8 +48,8 @@ extern "C" {
 
     EMSCRIPTEN_KEEPALIVE
     void end() {
+        debug("Bluefoot Ending...\n");
         rlImGuiShutdown();
         DisplayManager::getInstance().endLoop();
-        printf("Bluefoot Ending...\n");
     }
 }

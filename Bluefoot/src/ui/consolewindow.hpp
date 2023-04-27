@@ -6,14 +6,16 @@
 #include "fmt/core.h"
 #include "singleton.hpp"
 
+#include <streambuf>
+#include <sstream>
+#include <iostream>
 
 namespace UI {
 #define debug(...) UI::ConsoleWindow::getInstance().add_line(fmt::format(__VA_ARGS__))
 class ConsoleWindow: public UIElement, public Singleton<ConsoleWindow> {
     friend class Singleton<ConsoleWindow>;
 private:
-    ConsoleWindow() {};
-    ~ConsoleWindow() {};
+    SINGLETON_FUNCTIONS(ConsoleWindow)
 
     std::vector<std::string> lines;
     float initialWidth = 400;

@@ -34,4 +34,5 @@ add_compile_options(
 )
 
 add_subdirectory(lib)
+add_subdirectory(Toes)
 add_subdirectory(Bluefoot)

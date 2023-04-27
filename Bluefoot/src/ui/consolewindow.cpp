@@ -19,6 +19,7 @@ namespace UI {
                 auto line_begin = line.data();
                 ImGui::TextUnformatted(line_begin, line_begin + line.size());
             }
+            std::string line;
             ImGui::EndChild();
         }
         ImGui::End();
