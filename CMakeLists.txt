@@ -33,4 +33,5 @@ add_compile_options(
     "-g"
 )
 
+add_subdirectory(lib)
 add_subdirectory(Bluefoot)

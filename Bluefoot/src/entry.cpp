@@ -25,6 +25,8 @@ void drawFPS() {
 void draw() {
     UI::ConsoleWindow::getInstance().draw();
     drawFPS();
+    // ImGui::BeginTabBar("TestTab");
+    // ImGui::EndTabBar();
 }
 
 
