@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "preact/hooks";
 import { useBluefootInstance } from "@modules/Bluefoot"
+import { revertConsoleLog } from "@modules/Bluefoot/Logging";
 
 export default function GameCanvas() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -10,6 +11,7 @@ export default function GameCanvas() {
         instance.start();
 
         return () => {
+            revertConsoleLog();
             console.log("Instance Removed");
             instance.end()
         };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useCallback, useEffect, useState } from "preact/hooks";
 import BluefootInstance from "./BluefootInstance";
 
 // @ts-ignore
@@ -9,6 +9,14 @@ let hasInstantied = false;
 
 export function useBluefootInstance(canvas : { current: HTMLCanvasElement | null }) : BluefootInstance | undefined {
     const [instance, setInstance] = useState<BluefootInstance>();
+
+    const print = useCallback((...data : any) => {
+        if(!instance) {
+            console.log(...data);
+        } else {
+            instance.console_log(...data);
+        }
+    }, [instance])
 
     useEffect(() => {
         if(hasInstantied) {
@@ -22,7 +30,8 @@ export function useBluefootInstance(canvas : { current: HTMLCanvasElement | null
         try {
             Factory({
                 locateFile: () => WasmURL.toString(),
-                canvas: canvas.current
+                canvas: canvas.current,
+                print
             }).then(m => {
                 hasInstantied = true;
                 setInstance(new BluefootInstance(m));

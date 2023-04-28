@@ -24,7 +24,7 @@ namespace UI {
         }
         ImGui::End();
     }
-
+    
     void ConsoleWindow::add_line(std::string line) {
         lines.push_back(line);
     }

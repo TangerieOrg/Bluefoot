@@ -1,5 +1,6 @@
 #pragma once
 #include "structs.hpp"
+// TODO Remove
 
 namespace Toes {
 

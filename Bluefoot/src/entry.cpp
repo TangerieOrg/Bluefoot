@@ -25,9 +25,12 @@ void drawFPS() {
     DrawText(TextFormat("%i", GetFPS()), 15, 15, 30, WHITE);
 }
 
+int frameCount = 0;
+
 void draw() {
     UI::ConsoleWindow::getInstance().draw();
     drawFPS();
+    frameCount++;
 }
 
 namespace Entry {
