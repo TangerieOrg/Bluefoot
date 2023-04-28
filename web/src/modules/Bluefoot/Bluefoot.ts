@@ -15,14 +15,21 @@ export function useBluefootInstance(canvas : { current: HTMLCanvasElement | null
             console.error("Bluefoot game has already been created before");
             return;
         }
-
-        Factory({
-            locateFile: () => WasmURL.toString(),
-            canvas: canvas.current
-        }).then(m => {
-            hasInstantied = true;
-            setInstance(new BluefootInstance(m));
-        }).catch(() => {});
+        if(!canvas.current) {
+            console.error("Canvas not provided");
+            return;
+        }
+        try {
+            Factory({
+                locateFile: () => WasmURL.toString(),
+                canvas: canvas.current
+            }).then(m => {
+                hasInstantied = true;
+                setInstance(new BluefootInstance(m));
+            }).catch(() => {});
+        } catch(err) {
+            console.error(err);
+        }
     }, []);
 
     return instance;

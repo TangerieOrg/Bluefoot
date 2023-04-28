@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . .
 
 RUN ./scripts/generate.sh
-RUN ./scripts/build.sh
+RUN ./scripts/build-release.sh
 
 FROM --platform=$BUILDPLATFORM node:18.3.0 as build-web
 

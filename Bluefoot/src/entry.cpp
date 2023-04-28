@@ -4,40 +4,29 @@
 #include <stdexcept>
 #include <stdio.h>
 
-#include "globals.hpp"
-
 #include <emscripten/emscripten.h>
 #include <emscripten/html5.h>
 #include "raylib.h"
 
 #include "entry.hpp"
-#include "screen/canvasmanager.hpp"
+#include "screen/displaymanager.hpp"
 
 #include "imgui.h"
 #include "rlImGui.h"
-
-Global global;
+#include "ui/consolewindow.hpp"
 
 void NullLogger(int msgType, const char *text, va_list args) {}
-
-void setupGlobals() {
-    auto canvas = CanvasManager();
-    global.canvas = &canvas;
-}
 
 void drawFPS() {
     DrawText(TextFormat("FPS = %i", GetFPS()), 15, 15, 30, WHITE);
 }
 
 
-void testDraw() {
-    ImGui::Begin("Hello World");
-    ImGui::End();    
-}
-
 void draw() {
-    testDraw();
+    UI::ConsoleWindow::getInstance().draw();
     drawFPS();
+    // ImGui::BeginTabBar("TestTab");
+    // ImGui::EndTabBar();
 }
 
 
@@ -47,20 +36,18 @@ extern "C" {
         SetTraceLogCallback(NullLogger);
         // Its required for some reason
         emscripten_sleep(1);
-        printf("Bluefoot Starting...\n");
+        debug("Bluefoot Starting...");
 
-        setupGlobals();
-        rlImGuiSetup(true);
-        global.canvas->StartLoop(draw);
-        
-        
+        DisplayManager::getInstance().init(Vector2{1920, 1080}, 1);
+        DisplayManager::getInstance().startLoop(draw);
+
         CloseWindow();
     }
 
     EMSCRIPTEN_KEEPALIVE
     void end() {
         rlImGuiShutdown();
-        global.canvas->EndLoop();
+        DisplayManager::getInstance().endLoop();
         printf("Bluefoot Ending...\n");
     }
 }
