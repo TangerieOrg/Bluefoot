@@ -16,7 +16,7 @@ export function useBluefootInstance(canvas : { current: HTMLCanvasElement | null
         } else {
             instance.console_log(...data);
         }
-    }, [instance])
+    }, [])
 
     useEffect(() => {
         if(hasInstantied) {

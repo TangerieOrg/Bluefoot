@@ -1,4 +1,5 @@
 #include <emscripten/emscripten.h>
+#include <emscripten/bind.h>
 #include <string>
 
 #include "entry.hpp"
@@ -10,15 +11,13 @@ extern "C" {
     void start() {
         Entry::start();
     }
+}
 
-    EMSCRIPTEN_KEEPALIVE
-    void end() {
-        Entry::end();
-    }
+void console_log(std::string str) {
+    UI::ConsoleWindow::getInstance().add_line(str);
+}
 
-    EMSCRIPTEN_KEEPALIVE
-    void console_log(const char *s) {
-        std::string str(s);
-        UI::ConsoleWindow::getInstance().add_line(str);
-    }
+EMSCRIPTEN_BINDINGS(bluefoot) {
+    emscripten::function("end", &Entry::end);
+    emscripten::function("console_log", &console_log);
 }

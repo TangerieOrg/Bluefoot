@@ -1,13 +1,26 @@
 import { rebindConsoleLog } from "./Logging";
 
-export default class BluefootInstance {
-    private instance : any;
+type EmptyFunction = () => void;
 
-    private _console_log : (data : string) => void;
+type CArgs = [
+    name : string,
+    returnType : string | null,
+    argumentTypes : string[],
+    args : any[]
+]
+
+export interface BluefootModule extends EmscriptenModule {
+    _start: EmptyFunction;
+    end: EmptyFunction;
+    console_log: (...data : any[]) => void;
+    ccall: (...args : CArgs) => any;
+}
+
+export default class BluefootInstance {
+    private instance : BluefootModule;
 
     constructor(instance : any) {
         this.instance = instance;
-        this._console_log = this.instance.cwrap("console_log", null, ["string"]);
         rebindConsoleLog(this, this.console_log);
     }
     
@@ -16,11 +29,11 @@ export default class BluefootInstance {
     }
 
     end() {
-        return this.instance._end();
+        return this.instance.end();
     }
 
     console_log(...data : any[]) {
         const str = data.map(String).join(" ");
-        this._console_log(str);
+        this.instance.console_log(str);
     }
 }
