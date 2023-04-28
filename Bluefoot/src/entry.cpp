@@ -1,4 +1,3 @@
-#define PLATFORM Web
 #include <string> 
 
 #include <stdexcept>
@@ -31,25 +30,22 @@ void draw() {
     drawFPS();
 }
 
-extern "C" {
-    EMSCRIPTEN_KEEPALIVE
-    void start() {
-        SetTraceLogCallback(NullLogger);
-        // Its required for some reason
-        emscripten_sleep(1);
-        debug("Bluefoot Starting...");
+namespace Entry {
+void start() {
+    SetTraceLogCallback(NullLogger);
+    // Its required for some reason
+    emscripten_sleep(1);
+    debug("Bluefoot Starting...");
+    DisplayManager::getInstance().init(Vector2{1920, 1080}, 1);
+    
+    DisplayManager::getInstance().startLoop(draw);
 
-        DisplayManager::getInstance().init(Vector2{1920, 1080}, 1);
-        
-        DisplayManager::getInstance().startLoop(draw);
+    CloseWindow();
+}
 
-        CloseWindow();
-    }
-
-    EMSCRIPTEN_KEEPALIVE
-    void end() {
-        debug("Bluefoot Ending...\n");
-        rlImGuiShutdown();
-        DisplayManager::getInstance().endLoop();
-    }
+void end() {
+    debug("Bluefoot Ending...\n");
+    rlImGuiShutdown();
+    DisplayManager::getInstance().endLoop();
+}
 }
