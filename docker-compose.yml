@@ -2,7 +2,7 @@ version: '3'
 services:
   eugine:
     ports:
-      - 8801:3000
+      - 8801:80
     image: ${IMAGE_NAME}:latest
     deploy:
       replicas: 1
