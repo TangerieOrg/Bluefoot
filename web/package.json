@@ -5,9 +5,9 @@
   "scripts": {
     "start": "parcel public/index.html",
     "build": "parcel build public/index.html",
-    "clean": "rimraf dist .parcel-cache storybook-static",
+    "clean": "rimraf dist .parcel-cache",
     "storybook": "storybook dev -p 6006 --no-open",
-    "build-storybook": "rimraf storybook-static && storybook build"
+    "build-storybook": "storybook build -o dist/storybook && echo '<base href=\"/storybook/\">' | cat - dist/storybook/index.html > tmp.html && mv tmp.html dist/storybook/index.html"
   },
   "keywords": [],
   "author": "Tangerie <josh.cavill01@gmail.com> (https://github.com/Tangerie)",
@@ -59,6 +59,7 @@
     "@storybook/preact": "^7.0.7",
     "@storybook/preact-webpack5": "^7.0.7",
     "@storybook/testing-library": "^0.0.14-next.2",
+    "cross-env": "^7.0.3",
     "storybook": "^7.0.7"
   }
 }
