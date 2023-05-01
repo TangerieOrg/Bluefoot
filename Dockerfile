@@ -21,11 +21,13 @@ COPY --from=build-cpp /app/web/res /app/res
 
 RUN npm run build
 
-FROM node:18.3.0
+FROM nginx:alpine
 
-WORKDIR /app
+COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
 
-COPY --from=build-web /app/dist /app
+RUN rm -rf /usr/share/nginx/html/*
 
-EXPOSE 3000
-ENTRYPOINT [ "npx", "serve", "-s" ]
+COPY --from=build-web /app/dist /usr/share/nginx/html
+
+EXPOSE 3000 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
