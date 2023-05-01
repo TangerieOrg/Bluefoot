@@ -1,7 +1,4 @@
-import { AnyComponent, Component, ComponentChildren, JSX } from "preact";
-
-type ComponentWithProps<TProps extends {}> = (props : TProps) => JSX.Element
-type HOCProvider = ComponentWithProps<{ children : ComponentChildren}>;
+import { ComponentWithProps, HOCProvider } from "types/common";
 
 export function withHoc<TProps extends {}>(Component : ComponentWithProps<TProps>, HOC : HOCProvider) {
     return (props : TProps) => <HOC>
