@@ -4,10 +4,11 @@
   "description": "",
   "scripts": {
     "start": "parcel public/index.html",
-    "build": "parcel build public/index.html",
-    "clean": "rimraf dist .parcel-cache",
+    "build-parcel": "parcel build public/index.html",
     "storybook": "storybook dev -p 6006 --no-open",
-    "build-storybook": "storybook build -o dist/storybook && echo '<base href=\"/storybook/\">' | cat - dist/storybook/index.html > tmp.html && mv tmp.html dist/storybook/index.html"
+    "build-storybook": "storybook build -o dist/storybook && echo '<base href=\"/storybook/\">' | cat - dist/storybook/index.html > tmp.html && mv tmp.html dist/storybook/index.html",
+    "build": "npm run build-parcel && npm run build-storybook",
+    "clean": "rimraf dist .parcel-cache"
   },
   "keywords": [],
   "author": "Tangerie <josh.cavill01@gmail.com> (https://github.com/Tangerie)",
