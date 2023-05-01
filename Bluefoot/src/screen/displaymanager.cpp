@@ -9,6 +9,7 @@
 #include "rlImGui.h"
 #include "ui/imgui_theme.hpp"
 
+
 EM_JS(float, body_get_width, (), {
     return document.body.clientWidth;
 });
