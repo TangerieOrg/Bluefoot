@@ -2,7 +2,7 @@
 #include "structs.hpp"
 // TODO Remove
 
-namespace Toes {
+namespace Noodle {
 
 class Pin {
 private:
