@@ -66,8 +66,8 @@ void DisplayManager::resize() {
     float dpi = get_window_dpi();
 
     SetWindowSize(
-        static_cast<int>(width * dpi),
-        static_cast<int>(height * dpi)
+        static_cast<int>(width),
+        static_cast<int>(height)
     );
 }
 
