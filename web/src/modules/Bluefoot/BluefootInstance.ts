@@ -9,7 +9,7 @@ type CArgs = [
     args : any[]
 ]
 
-export interface BluefootModule extends EmscriptenModule {
+export interface BluefootModule {
     _start: EmptyFunction;
     end: EmptyFunction;
     console_log: (...data : any[]) => void;
