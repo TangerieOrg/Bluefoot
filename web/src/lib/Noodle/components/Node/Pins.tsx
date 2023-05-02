@@ -1,4 +1,4 @@
-import { NodeInput, NodeOutput, NodePin } from "@Noodle/types/Node";
+import { NodeInput, NodeOutput, NodePin, PinType } from "@Noodle/types/Node";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { getPinStyle } from "@Noodle/styles/PinStyles";
@@ -8,25 +8,34 @@ export interface PinCircleStyle {
     pin : NodePin;
 }
 
-export function PinCircle({ pin, ...props } : PinCircleStyle) {
+export function PinIcon({ pin, ...props } : PinCircleStyle) {
     const style = getPinStyle(pin);
-    return <FontAwesomeIcon icon={solid('circle')} size="xs" className={`scale-75 ${props.class} ${style}`}/>
+    if(pin.type === PinType.Execution) {
+        return <FontAwesomeIcon icon={solid('diamond')} size="sm" className={`scale-90 relative top-0.5 ${props.class} ${style}`}/>
+    }
+    return <FontAwesomeIcon icon={solid('circle')} size="sm" className={`scale-75  ${props.class} ${style}`}/>
 }
 
-export function NodeInputPin({ pin } : { pin : NodeInput}) {
-    return <div class="flex flex-row w-full">
+const EXEC_PIN_NAME = ["execute", "then"];
+const getPrettyPinName = (pin : NodeInput) => {
+    if(pin.type === PinType.Execution && EXEC_PIN_NAME.includes(pin.name)) return "";
+    return pin.name;
+}
+
+export function NodeInputPin({ pin } : { pin : NodeInput }) {
+    return <div class="flex flex-row w-full group">
         <div class="flex flex-col justify-center">
-            <PinCircle pin={pin} class="-translate-x-1/2"/>
+            <PinIcon pin={pin} class="-translate-x-1/2 rotate-180 group-hover:opacity-60 transition-opacity cursor-pointer"/>
         </div>
-        <span class="text-xs">{pin.name}</span>
+        <span class="text-xs flex flex-col justify-center">{getPrettyPinName(pin)}</span>
     </div>
 }
 
-export function NodeOutputPin({ pin } : { pin : NodeOutput}) {
-    return <div class="flex flex-row w-full text-right justify-end">
-        <span class="text-xs">{pin.name}</span>
+export function NodeOutputPin({ pin } : { pin : NodeOutput }) {
+    return <div class="flex flex-row w-full text-right justify-end group">
+        <span class="text-xs flex flex-col justify-center">{getPrettyPinName(pin)}</span>
         <div class="flex flex-col justify-center">
-            <PinCircle pin={pin} class="translate-x-1/2"/>
+            <PinIcon pin={pin} class="translate-x-1/2 group-hover:opacity-60 transition-opacity cursor-pointer"/>
         </div>
     </div>
 }

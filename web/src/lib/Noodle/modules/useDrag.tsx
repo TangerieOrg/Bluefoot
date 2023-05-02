@@ -21,9 +21,9 @@ export enum MouseButton {
 }
 
 
-export default function useDrag(button : MouseButton = MouseButton.Left) : UseDragReturn {
+export default function useDrag(initialValue : [number, number] = [0, 0], button : MouseButton = MouseButton.Left) : UseDragReturn {
     const [isDragging, setIsDragging] = useState(false);
-    const [position, setPosition] = useState<Position>([0, 0]);
+    const [position, setPosition] = useState<Position>(initialValue);
     const [cursorStartPosition, setCursorStartPosition] = useState<Position>([0, 0]);
     const [positionStart, setPositionStart] = useState<Position>(position);
 
