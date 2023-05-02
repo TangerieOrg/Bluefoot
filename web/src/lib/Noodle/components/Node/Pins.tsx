@@ -11,7 +11,7 @@ export interface PinCircleStyle {
 export function PinIcon({ pin, ...props } : PinCircleStyle) {
     const style = getPinStyle(pin);
     if(pin.type === PinType.Execution) {
-        return <FontAwesomeIcon icon={solid('diamond')} size="sm" className={`scale-90 relative top-0.5 ${props.class} ${style}`}/>
+        return <FontAwesomeIcon icon={solid('diamond')} size="sm" className={`scale-90 ${props.class} ${style}`}/>
     }
     return <FontAwesomeIcon icon={solid('circle')} size="sm" className={`scale-75  ${props.class} ${style}`}/>
 }
