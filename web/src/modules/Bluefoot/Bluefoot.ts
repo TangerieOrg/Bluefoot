@@ -5,10 +5,11 @@ import BluefootInstance from "./BluefootInstance";
 const WasmURL = new URL(`/res/Bluefoot.wasm`, import.meta.url);
 const Factory : (args : any) => Promise<any> = require(`/res/Bluefoot.js`);
 
+let globalInstance : BluefootInstance;
 let hasInstantied = false;
 
 export function useBluefootInstance(canvas : { current: HTMLCanvasElement | null }) : BluefootInstance | undefined {
-    const [instance, setInstance] = useState<BluefootInstance>();
+    const [instance, setInstance] = useState<BluefootInstance>(globalInstance);
 
     const print = useCallback((...data : any) => {
         if(!instance) {

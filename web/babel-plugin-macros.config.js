@@ -3,6 +3,6 @@ module.exports = {
         'license': 'free'
     },
     'fontawesome.macro': {
-        type: 'pro'
+        type: 'free'
     }
 }

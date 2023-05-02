@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Toes {
+namespace Noodle {
 
 enum PinValueType {
     Execution,

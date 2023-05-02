@@ -2,7 +2,7 @@
 #include "structs.hpp"
 #include <string>
 
-namespace Toes::Utils {
+namespace Noodle::Utils {
 void* createDefaultForType(PinValueType type) {
     void* value;
     switch(type) {

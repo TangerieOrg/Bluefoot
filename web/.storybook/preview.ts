@@ -14,3 +14,10 @@ const preview: Preview = {
 };
 
 export default preview;
+
+export const parameters = {
+  darkMode: {
+    current: 'dark',
+    stylePreview: true
+  }
+};
