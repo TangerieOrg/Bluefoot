@@ -3,9 +3,13 @@
 
 import { Node } from "../Node";
 import EditorViewport from "./EditorViewport";
-import { PinType } from "@Noodle/types/Node";
+import { NodeDefinition, PinType } from "@Noodle/types/Node";
+import NodeConnectionLayer, { NodeConnectionItem } from "./NodeConntectionLayer";
+import { ComponentWithProps } from "types/common";
+import { useMemo } from "preact/hooks";
+import { memo } from "preact/compat";
 
-const AddNode = ({ x, y }: { x: number, y: number }) => <Node node={{
+const AddNode : NodeDefinition = {
     title: "Add",
     inputs: [
         {
@@ -23,9 +27,9 @@ const AddNode = ({ x, y }: { x: number, y: number }) => <Node node={{
             type: PinType.Number
         }
     ]
-}} position={[x, y]} />
+}
 
-const NumberToStringNode = ({ x, y }: { x: number, y: number }) => <Node node={{
+const NumberToStringNode : NodeDefinition = {
     title: "ToString (Number)",
     inputs: [
         {
@@ -51,9 +55,9 @@ const NumberToStringNode = ({ x, y }: { x: number, y: number }) => <Node node={{
             type: PinType.String
         }
     ]
-}} position={[x, y]} />
+}
 
-const EventNode = ({ x, y }: { x: number, y: number }) => <Node node={{
+const EventNode : NodeDefinition = {
     title: "On Key Event",
     inputs: [],
     outputs: [
@@ -71,9 +75,9 @@ const EventNode = ({ x, y }: { x: number, y: number }) => <Node node={{
         },
     ],
     type: "Event"
-}} position={[x, y]} />
+}
 
-const StringLengthNode = ({ x, y }: { x: number, y: number }) => <Node node={{
+const StringLengthNode : NodeDefinition = {
     title: "Length (String)",
     type: "Pure",
     inputs: [
@@ -88,9 +92,9 @@ const StringLengthNode = ({ x, y }: { x: number, y: number }) => <Node node={{
             type: PinType.Number
         }
     ]
-}} position={[x, y]} />
+}
 
-const LogStringNode = ({ x, y }: { x: number, y: number }) => <Node node={{
+const LogStringNode : NodeDefinition = {
     title: "Log String",
     type: "Development",
     inputs: [
@@ -109,13 +113,73 @@ const LogStringNode = ({ x, y }: { x: number, y: number }) => <Node node={{
             type: PinType.Execution
         },
     ]
-}} position={[x, y]} />
+}
+
+interface NodePlacement {
+    x : number,
+    y : number,
+    def : NodeDefinition,
+    id? : number
+}
+
+const nodesToPlace : NodePlacement[] = [
+    { def: EventNode, x: -40, y: 20 },
+    { def: StringLengthNode, x: 200, y: 200 },
+    { def: NumberToStringNode, x: 450, y: 20 },
+    { def: LogStringNode, x: 725, y: 20 },
+]
+
+const NodeLayer = memo(({ nodes } : { nodes: NodePlacement[] }) => <div class="pointer-events-none absolute top-0 left-0 w-full h-full">
+    {
+        nodes.map(({ x, y, def, id}) => <Node node={def} position={[x, y]} key={id}/>)
+    }
+</div>)
+
+// 14x16
+// x => +- W/2
+
+const W = 14;
+const H = 16;
+
+const connections : NodeConnectionItem[] = [
+    {
+        start: [120, 80],
+        end: [468, 80]
+    },
+    {
+        start: [120, 144],
+        end: [218, 268]
+    },
+    {
+        start: [368, 268],
+        end: [468, 118]
+    },
+    {
+        start: [636, 80],
+        end: [743, 80]
+    },
+    {
+        start: [636, 118],
+        end: [743, 118]
+    }
+]
+.map(({start, end}) => ({
+    start: [start[0] - W/4, start[1] - H/2],
+    end: [end[0] - W, end[1] - H/2]
+}));
 
 export default function Editor() {
-    return <EditorViewport initialPosition={[-100, -200]} initialScale={1.25}>
-        <EventNode x={-40} y={20} />
-        <StringLengthNode x={200} y={75} />
-        <NumberToStringNode x={450} y={20} />
-        <LogStringNode x={725} y={20} />
+    const nodes = useMemo<NodePlacement[]>(() => {
+        return nodesToPlace.map((n, i) => ({
+            ...n,
+            id: i
+        }))
+    }, []);
+
+    return <EditorViewport 
+        initialPosition={[-150, -100]} initialScale={1.2}
+        >
+        <NodeConnectionLayer connections={connections}/>
+        <NodeLayer nodes={nodes}/>
     </EditorViewport>
 }
