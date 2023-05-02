@@ -18,12 +18,15 @@ const BASE_CONTAINER_STYLE: JSX.CSSProperties = {
 
 interface Props {
     children?: ComponentChildren;
+    initialPosition? : [number, number];
+    initialScale? : number;
 }
 
-export default function EditorViewport({ children }: Props) {
-    const { containerProps: containerScrollProps, scale} = useScrollScale();
-    const { containerProps: containerDragProps, position } = useDrag(MouseButton.Right);
-    // console.log("dev", "Storybook", process.env.STORYBOOK);
+
+export default function EditorViewport({ children, initialPosition, initialScale }: Props) {
+    const { containerProps: containerScrollProps, scale} = useScrollScale(initialScale ?? 1);
+    const { containerProps: containerDragProps, position } = useDrag(initialPosition ?? [0, 0], MouseButton.Right);
+
     const style = useMemo<JSX.CSSProperties>(() => {
         const largeScale = `${scale * 100}px`;
         const smallScale = `${scale * 20}px`;

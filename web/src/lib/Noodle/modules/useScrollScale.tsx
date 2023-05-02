@@ -11,8 +11,8 @@ interface UseScrollScaleReturn {
     scale : number
 }
 
-export default function useScrollScale(scrollScale : number = 0.001, maxScale : number = 2, minScale : number = 0.5) : UseScrollScaleReturn {
-    const [scale, setScale] = useState<number>(1);
+export default function useScrollScale(initialValue : number = 1, scrollScale : number = 0.001, maxScale : number = 2, minScale : number = 0.5) : UseScrollScaleReturn {
+    const [scale, setScale] = useState<number>(initialValue);
 
     const onWheel = useCallback<ScrollEvHandler>(throttle<ScrollEvHandler>((ev) => {
         setScale(

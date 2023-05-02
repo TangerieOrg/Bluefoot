@@ -2,6 +2,8 @@ export interface NodeDefinition {
     title : string;
     inputs: NodeInput[];
     outputs : NodeOutput[];
+    // TEMPORARY
+    type? : string;
 }
 
 // Filler
