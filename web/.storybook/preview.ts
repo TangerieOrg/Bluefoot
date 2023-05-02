@@ -19,5 +19,10 @@ export const parameters = {
   darkMode: {
     current: 'dark',
     stylePreview: true
+  },
+  console: {
+    disable: false,
+    patterns: [/^dev$/],
+    omitFirst: true
   }
 };

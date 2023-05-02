@@ -7,11 +7,9 @@ type Story = StoryObj<Props>;
 
 const meta : Meta<Props> = {
     title: "Noodle/Editor",
-    component: Editor,
-    tags: ['autodocs']
+    component: Editor
 }
 export default meta;
 
 export const Basic : Story = {
-    
 }

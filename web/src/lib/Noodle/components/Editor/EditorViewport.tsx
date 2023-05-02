@@ -23,7 +23,7 @@ interface Props {
 export default function EditorViewport({ children }: Props) {
     const { containerProps: containerScrollProps, scale} = useScrollScale();
     const { containerProps: containerDragProps, position } = useDrag(MouseButton.Right);
-
+    // console.log("dev", "Storybook", process.env.STORYBOOK);
     const style = useMemo<JSX.CSSProperties>(() => {
         const largeScale = `${scale * 100}px`;
         const smallScale = `${scale * 20}px`;
@@ -37,7 +37,7 @@ export default function EditorViewport({ children }: Props) {
 
     return (
         <div
-        class="w-full h-full min-h-[40rem] overflow-hidden relative top-0 left-0 pointer-events-auto"
+        class="w-full h-full overflow-hidden relative top-0 left-0 pointer-events-auto"
         tabIndex={-1}
         {...containerScrollProps}
         {...containerDragProps}

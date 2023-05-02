@@ -6,6 +6,8 @@ const getPath = (...paths: string[]) => path.resolve(__dirname, "../src", ...pat
 const config: StorybookConfig = {
   stories: ["../src/stories/**/*.mdx", "../src/stories/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: [
+    "@storybook/addon-actions",
+    "@storybook-extras/console",
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
@@ -27,7 +29,7 @@ const config: StorybookConfig = {
     options: {},
   },
   docs: {
-    autodocs: true,
+    autodocs: false,
   },
   webpackFinal: async (config, options) => {
     if (!config.resolve) config.resolve = {};
