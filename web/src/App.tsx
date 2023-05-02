@@ -13,7 +13,7 @@ function App() {
     }, []);
 
     return (
-        <div class="min-h-screen w-screen bg-gray-800 text-white">
+        <div class="min-h-screen w-screen">
             <div class="h-screen w-screen">
                 <GameCanvas/>
             </div>
