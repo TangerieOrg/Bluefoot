@@ -20,7 +20,8 @@ const config: StorybookConfig = {
         cssModules: true
       }
     },
-    "storybook-dark-mode"
+    "storybook-dark-mode",
+    '@storybook/addon-console'
   ],
   framework: {
     name: "@storybook/preact-webpack5",

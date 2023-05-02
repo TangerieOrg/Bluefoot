@@ -22,6 +22,7 @@ export enum MouseButton {
     Right
 }
 
+
 export default function useDrag(button : MouseButton = MouseButton.Left) : UseDragReturn {
     const [isDragging, setIsDragging] = useState(false);
     const [position, setPosition] = useState<Position>([0, 0]);
