@@ -1,4 +1,4 @@
-import EditorViewport from "@Noodle/components/Editor/EditorViewport";
+import Editor from "@Noodle/components/Editor/Editor";
 import { solid } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useOverlayState } from "@modules/OverlayManager";
@@ -17,6 +17,6 @@ export default function NoodleEditor() {
                 </button>
             </div>
         </div>
-        <EditorViewport/>
+        <Editor/>
     </div>
 }

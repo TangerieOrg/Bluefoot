@@ -1,8 +1,8 @@
 // BaklavaJS Example
 // https://jyc6f.csb.app/
 
-import { Node } from "./Node";
-import EditorViewport from "./Editor/EditorViewport";
+import { Node } from "../Node";
+import EditorViewport from "./EditorViewport";
 import { PinType } from "@Noodle/types/Node";
 
 const ExampleNode = ({ x, y } : { x : number, y : number }) => <Node node={{
