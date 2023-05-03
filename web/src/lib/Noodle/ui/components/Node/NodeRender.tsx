@@ -34,9 +34,9 @@ export function NodeRender(props: Props) {
                 <div class={`rounded-t-lg px-4 py-2 ${headerColor} cursor-grab peer border-2 border-b-0 border-transparent hover:border-blue-500 transition-all`}>
                     <span class="inline">
                         <h1 class="inline text-[0.9rem]/tight font-bold truncate capitalize">{node.displayName ?? node.type}</h1>
-                        {
+                        {/* {
                             node.displayName != null && <h2 class="inline text-xs/tight truncate pl-2">{node.type}</h2>
-                        }
+                        } */}
                     </span>
                 </div>
                 <div class={`rounded-b-lg ${bodyColor} pb-4 pt-2 min-w-[10rem] border-2 border-t-0 border-transparent peer-hover:border-blue-500 transition-all`}>
