@@ -6,7 +6,7 @@ import { useMemo } from "preact/hooks";
 
 
 const BASE_CONTAINER_STYLE: JSX.CSSProperties = {
-    backgroundColor: "#232323",
+    // backgroundColor: "#232323",
     backgroundImage: [
         "linear-gradient(rgba(0, 0, 0, 0.1333333333) 2px, transparent 2px)",
         "linear-gradient(90deg, rgba(0, 0, 0, 0.1333333333) 2px, transparent 2px)",
@@ -47,7 +47,7 @@ export default function EditorViewport({ children, initialPosition, initialScale
         onContextMenu={(ev) => {ev.preventDefault(); return false}}
         >
             {/* Background behind nodes */}
-            <div class="absolute top-0 left-0 w-full h-full pointer-events-none" 
+            <div class="absolute top-0 left-0 w-full h-full pointer-events-none bg-stone-950" 
             style={style} 
             >
             </div>

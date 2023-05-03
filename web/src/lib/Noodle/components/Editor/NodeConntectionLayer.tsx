@@ -1,33 +1,19 @@
-import LinePath from "@SVGUtil/LinePath";
-import { useMemo } from "preact/hooks";
-
 export interface NodeConnectionItem {
     start : [number, number],
     end : [number, number]
 }
 
-const lerp = (a : number, b : number, t : number) => a*(1-t)+b*t;
 
-const STEPS : [pX : number, pY : number][] = [
-    [0, 0],
-    [0.3, 0],
-    [0.5, 0.5],
-    [0.7, 1],
-    [1, 1]
-]
-const calcPoints = ({ start, end } : NodeConnectionItem) : [number, number][] => {
-    return STEPS.map(([xPerc, yPerc]) => ([
-        lerp(start[0], end[0], xPerc),
-        lerp(start[1], end[1], yPerc)
-    ]))
-}
-
+const SmoothPath = ({ start: [startX, startY], end: [endX, endY] } : { start: [number, number], end : [number, number]}) => (
+    <path d={`
+        M ${startX} ${startY}
+        C ${(startX + endX) / 2} ${startY} ${(startX + endX) / 2} ${endY} ${endX} ${endY}
+    `}/>
+)
 
 const NodeConnection = ({ conn } : { conn : NodeConnectionItem}) => {
-    const points = useMemo(() => calcPoints(conn), [conn]);
-
     return <g class="hover:stroke-[3] pointer-events-auto transition-all">
-        <LinePath points={points}/>
+        <SmoothPath start={conn.start} end={conn.end}/>
     </g>
 
 }
