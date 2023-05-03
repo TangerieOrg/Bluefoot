@@ -2,28 +2,28 @@ import { NodeDefinition, NodePin, NodeTag, PinDirection, PinType } from "@Noodle
 
 type StringExclude<TString, TExclude> = TString extends TExclude ? never : TString;
 
-const createEmptyDefinition = (type : string) : NodeDefinition => ({
+const createEmptyDefinition = <T extends string>(type : T) : NodeDefinition<T> => ({
     type,
     pins: [],
     tags: []
 })
 
-export class NodeDefinitionBuilder<TPins extends string = never, TTags extends NodeTag = never> {
-    private definition : NodeDefinition<TPins, TTags>;
+export class NodeDefinitionBuilder<TType extends string, TPins extends string = never, TTags extends NodeTag = never> {
+    private definition : NodeDefinition<TType, TPins>;
 
     private hasOutputExec = false;
     private hasInputExec = false;
 
-    private constructor(type : string) {
-        this.definition = createEmptyDefinition(type);
+    private constructor(type : TType) {
+        this.definition = createEmptyDefinition<TType>(type);
     }
 
-    public static create(type : string) {
-        return new NodeDefinitionBuilder(type);
+    public static create<T extends string>(type : T) {
+        return new NodeDefinitionBuilder<T>(type);
     }
 
     pin<TName extends string>(name : StringExclude<TName, TPins>, type : PinType, direction : PinDirection, displayName? : string, description? : string) 
-    : NodeDefinitionBuilder<TPins | TName, TTags> {
+    : NodeDefinitionBuilder<TType, TPins | TName, TTags> {
         if(type === "Execution") {
             if(direction === "Input") this.hasInputExec = true;
             else this.hasOutputExec = true;
@@ -37,7 +37,7 @@ export class NodeDefinitionBuilder<TPins extends string = never, TTags extends N
             description
         }
 
-        const def = this.definition as NodeDefinition<TPins | TName, TTags>;
+        const def = this.definition as NodeDefinition<TType, TPins | TName>;
         
         def.pins.push(Object.freeze(p));
         
@@ -52,7 +52,7 @@ export class NodeDefinitionBuilder<TPins extends string = never, TTags extends N
         return this.pin(name, type, PinDirection.Output, displayName, description);
     }
 
-    tag<T extends NodeTag>(tag : StringExclude<T, TTags>) : NodeDefinitionBuilder<TPins, T | TTags> {
+    tag<T extends NodeTag>(tag : StringExclude<T, TTags>) : NodeDefinitionBuilder<TType, TPins, T | TTags> {
         if(!this.definition.tags.includes(tag)) this.definition.tags.push(tag);
         return this;
     }
@@ -79,7 +79,7 @@ export class NodeDefinitionBuilder<TPins extends string = never, TTags extends N
         Object.freeze(this.definition.pins);
     }
 
-    build() : Readonly<NodeDefinition<TPins, TTags>> {
+    build() : Readonly<NodeDefinition<TType, TPins>> {
         if(this.definition.tags.length === 0) this.setImplicitTags();
         this.freeze();
         return Object.freeze(this.definition)

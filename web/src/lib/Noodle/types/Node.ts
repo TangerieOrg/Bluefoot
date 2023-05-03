@@ -35,9 +35,21 @@ export const NodeTag = {
 } as const;
 export type NodeTag = typeof NodeTag[keyof typeof NodeTag];
 
-export interface NodeDefinition<TPinNames extends string = never, TTags extends string = never> extends OptionalUserDisplayProperties {
-    type : string; // The base name of the node
+export interface NodeDefinition<TType extends string = string, TPinNames extends string = never> extends OptionalUserDisplayProperties {
+    type : TType; // The base name of the node
     pins : Array<NodePin<TPinNames>>;
     tags : Array<NodeTag>;
 }
 
+export type PinPath = [node : number, pin : string]
+
+export interface NodeConnection {
+    id : number;
+    from: PinPath; // Output of node
+    to: PinPath; // Input of node
+}
+
+export interface NodeState<TPinNames extends string = never> {
+    id : number;
+    trackedConnections : Set<number>;
+}

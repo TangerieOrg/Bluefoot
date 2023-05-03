@@ -27,5 +27,7 @@ describe("Node Creation", () => {
         const p = node.getPin("a");
         expect(p).not.to.be.null;
         expect(p.type).to.equal("Number");
+
+        expect(node.getConnections("a")).to.be.undefined;
     })
 })
