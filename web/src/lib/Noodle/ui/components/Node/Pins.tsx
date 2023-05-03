@@ -1,7 +1,7 @@
-import { NodeInput, NodeOutput, NodePin, PinType } from "@Noodle/types/Node";
+import { NodeInput, NodeOutput, NodePin, PinType } from "@Noodle/ui/types/Node";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
-import { getPinStyle } from "@Noodle/styles/PinStyles";
+import { getPinStyle } from "@Noodle/ui/styles/PinStyles";
 
 export interface PinCircleStyle {
     class?: string;

@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from "@storybook/preact"; 
-import { Node as NodeComponent } from "@Noodle/components/Node/Node";
+import { Node as NodeComponent } from "@Noodle/ui/components/Node/Node";
 import { ComponentProps } from "preact";
-import { PinType } from "@Noodle/types/Node";
+import { PinType } from "@Noodle/ui/types/Node";
 
 type Props = ComponentProps<typeof NodeComponent>;
 type StoryProps = Props["node"];

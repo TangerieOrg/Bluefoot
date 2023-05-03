@@ -3,7 +3,7 @@
 
 import { Node } from "../Node";
 import EditorViewport from "./EditorViewport";
-import { NodeDefinition, PinType } from "@Noodle/types/Node";
+import { NodeDefinition, PinType } from "@Noodle/ui/types/Node";
 import NodeConnectionLayer, { NodeConnectionItem } from "./NodeConntectionLayer";
 import { ComponentWithProps } from "types/common";
 import { useMemo } from "preact/hooks";

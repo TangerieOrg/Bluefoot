@@ -1,4 +1,4 @@
-import Editor from "@Noodle/components/Editor/Editor";
+import Editor from "@Noodle/ui/components/Editor/Editor";
 import { solid } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useOverlayState } from "@modules/OverlayManager";

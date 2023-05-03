@@ -1,9 +1,9 @@
-import { NodeDefinition, NodePin, PinType } from "@Noodle/types/Node";
+import { NodeDefinition, NodePin, PinType } from "@Noodle/ui/types/Node";
 import TitleBox from "../common/TitleBox";
 import { NodeInputPin, NodeOutputPin } from "./Pins";
 import { useMemo } from "preact/hooks";
 import { JSX } from "preact";
-import { getNodeColors } from "@Noodle/styles/NodeStyles";
+import { getNodeColors } from "@Noodle/ui/styles/NodeStyles";
 
 interface Props {
     node: NodeDefinition;

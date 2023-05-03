@@ -1,5 +1,5 @@
-import useDrag, { MouseButton } from "@Noodle/modules/useDrag";
-import useScrollScale from "@Noodle/modules/useScrollScale";
+import useDrag, { MouseButton } from "@Noodle/ui/modules/useDrag";
+import useScrollScale from "@Noodle/ui/modules/useScrollScale";
 import { ComponentChildren } from "preact";
 import { JSX } from "preact";
 import { useMemo } from "preact/hooks";

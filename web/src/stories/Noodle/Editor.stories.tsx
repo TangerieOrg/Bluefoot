@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/preact"; 
 import { ComponentProps } from "preact";
-import Editor from "@Noodle/components/Editor/Editor";
+import Editor from "@Noodle/ui/components/Editor/Editor";
 
 type Props = ComponentProps<typeof Editor>;
 type Story = StoryObj<Props>;

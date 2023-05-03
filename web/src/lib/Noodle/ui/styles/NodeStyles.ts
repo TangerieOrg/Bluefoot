@@ -1,4 +1,4 @@
-import { NodeDefinition } from "@Noodle/types/Node";
+import { NodeDefinition } from "@Noodle/ui/types/Node";
 
 const DEFAULT_NODE_COLORS : [string, string] = ["bg-stone-800", "bg-stone-700"];
 
