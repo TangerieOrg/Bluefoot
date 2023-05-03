@@ -27,13 +27,13 @@ export function NodeInputPin({ pin } : { pin : NodePin }) {
         <div class="flex flex-col justify-center">
             <PinIcon pin={pin} class="-translate-x-1/2 rotate-180 group-hover:opacity-60 transition-opacity cursor-pointer"/>
         </div>
-        <span class="text-xs flex flex-col justify-center">{getPrettyPinName(pin)}</span>
+        <span class="text-xs flex flex-col justify-center capitalize">{getPrettyPinName(pin)}</span>
     </div>
 }
 
 export function NodeOutputPin({ pin } : { pin : NodePin }) {
     return <div class="flex flex-row w-full text-right justify-end group">
-        <span class="text-xs flex flex-col justify-center">{getPrettyPinName(pin)}</span>
+        <span class="text-xs flex flex-col justify-center capitalize">{getPrettyPinName(pin)}</span>
         <div class="flex flex-col justify-center">
             <PinIcon pin={pin} class="translate-x-1/2 group-hover:opacity-60 transition-opacity cursor-pointer"/>
         </div>

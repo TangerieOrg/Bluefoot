@@ -33,38 +33,40 @@ export function NodeRender(props: Props) {
             <div class="min-h-fit w-fit shadow-lg shadow-stone-900 group/titlebox">
                 <div class={`rounded-t-lg px-4 py-2 ${headerColor} cursor-grab peer border-2 border-b-0 border-transparent hover:border-blue-500 transition-all`}>
                     <span class="inline">
-                        <h1 class="inline text-[0.9rem]/tight font-bold truncate">{node.displayName ?? node.type}</h1>
+                        <h1 class="inline text-[0.9rem]/tight font-bold truncate capitalize">{node.displayName ?? node.type}</h1>
                         {
-                            node.displayName != null && <h2 class="inline text-xs/tight truncate ml-2">{node.type}</h2>
+                            node.displayName != null && <h2 class="inline text-xs/tight truncate pl-2">{node.type}</h2>
                         }
                     </span>
                 </div>
-                <div class={`rounded-b-lg ${bodyColor} pb-4 pt-2 flex flex-col min-w-[10rem] border-2 border-t-0 border-transparent peer-hover:border-blue-500 transition-all`}>
-                    {
-                        (inExec.length > 0 || outExec.length > 0) && <div class="flex flex-row justify-between mb-4">
+                <div class={`rounded-b-lg ${bodyColor} pb-4 pt-2 min-w-[10rem] border-2 border-t-0 border-transparent peer-hover:border-blue-500 transition-all`}>
+                    <div class="-mx-[2px] flex flex-col">
+                        {
+                            (inExec.length > 0 || outExec.length > 0) && <div class="flex flex-row justify-between mb-4">
+                                <div class="flex flex-col space-y-2">
+                                    {
+                                        inExec.map((input, i) => <NodeInputPin pin={input} key={i} />)
+                                    }
+                                </div>
+                                <div class="flex flex-col space-y-2">
+                                    {
+                                        outExec.map((output, i) => <NodeOutputPin pin={output} key={i} />)
+                                    }
+                                </div>
+                            </div>
+                        }
+                        <div class="flex flex-row justify-between mt-2">
                             <div class="flex flex-col space-y-2">
                                 {
-                                    inExec.map((input, i) => <NodeInputPin pin={input} key={i} />)
+                                    inPins.map((input, i) => <NodeInputPin pin={input} key={i} />)
                                 }
                             </div>
-                            <div class="flex flex-col space-y-2">
-                                {
-                                    outExec.map((output, i) => <NodeOutputPin pin={output} key={i} />)
-                                }
-                            </div>
-                        </div>
-                    }
-                    <div class="flex flex-row justify-between mt-2">
-                        <div class="flex flex-col space-y-2">
-                            {
-                                inPins.map((input, i) => <NodeInputPin pin={input} key={i} />)
-                            }
-                        </div>
 
-                        <div class="flex flex-col space-y-2">
-                            {
-                                outPins.map((output, i) => <NodeOutputPin pin={output} key={i} />)
-                            }
+                            <div class="flex flex-col space-y-2">
+                                {
+                                    outPins.map((output, i) => <NodeOutputPin pin={output} key={i} />)
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
