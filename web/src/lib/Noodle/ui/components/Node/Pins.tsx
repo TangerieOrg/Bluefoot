@@ -1,4 +1,4 @@
-import { NodeInput, NodeOutput, NodePin, PinType } from "@Noodle/ui/types/Node";
+import { NodePin, PinType } from "@Noodle/types/Node";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { getPinStyle } from "@Noodle/ui/styles/PinStyles";
@@ -17,12 +17,12 @@ export function PinIcon({ pin, ...props } : PinCircleStyle) {
 }
 
 const EXEC_PIN_NAME = ["execute", "then"];
-const getPrettyPinName = (pin : NodeInput) => {
+const getPrettyPinName = (pin : NodePin) => {
     if(pin.type === PinType.Execution && EXEC_PIN_NAME.includes(pin.name)) return "";
     return pin.name;
 }
 
-export function NodeInputPin({ pin } : { pin : NodeInput }) {
+export function NodeInputPin({ pin } : { pin : NodePin }) {
     return <div class="flex flex-row w-full group">
         <div class="flex flex-col justify-center">
             <PinIcon pin={pin} class="-translate-x-1/2 rotate-180 group-hover:opacity-60 transition-opacity cursor-pointer"/>
@@ -31,7 +31,7 @@ export function NodeInputPin({ pin } : { pin : NodeInput }) {
     </div>
 }
 
-export function NodeOutputPin({ pin } : { pin : NodeOutput }) {
+export function NodeOutputPin({ pin } : { pin : NodePin }) {
     return <div class="flex flex-row w-full text-right justify-end group">
         <span class="text-xs flex flex-col justify-center">{getPrettyPinName(pin)}</span>
         <div class="flex flex-col justify-center">

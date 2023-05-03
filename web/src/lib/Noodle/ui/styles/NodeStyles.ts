@@ -1,13 +1,16 @@
-import { NodeDefinition } from "@Noodle/ui/types/Node";
+import { NodeDefinition, NodeTag } from "@Noodle/types/Node";
 
 const DEFAULT_NODE_COLORS : [string, string] = ["bg-stone-800", "bg-stone-700"];
 
-const NODE_COLORS : Record<string, [string, string]> = {
+const NODE_COLORS : Record<NodeTag, [string, string]> = {
     "Event": ["bg-red-800", "bg-stone-700"],
     "Pure": ["bg-green-800", "bg-stone-700"],
     "Development": ["bg-purple-800", "bg-stone-700"]
 };
 
-export function getNodeColors({ type } : NodeDefinition) : [string, string] {
-    return !!type ? [...(NODE_COLORS[type] ?? DEFAULT_NODE_COLORS)] : [...DEFAULT_NODE_COLORS];
+export function getNodeColors({ tags } : NodeDefinition<string, string>) : [string, string] {
+    if(tags.includes("Development")) return NODE_COLORS["Development"];
+    if(tags.includes("Event")) return NODE_COLORS["Event"];
+    if(tags.includes("Pure")) return NODE_COLORS["Pure"];
+    return DEFAULT_NODE_COLORS;
 }

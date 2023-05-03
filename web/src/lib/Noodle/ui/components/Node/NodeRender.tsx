@@ -1,34 +1,30 @@
-import { NodeDefinition, NodePin, PinType } from "@Noodle/ui/types/Node";
-import TitleBox from "../common/TitleBox";
+import { NodeDefinition, NodePin, PinType } from "@Noodle/types/Node";
 import { NodeInputPin, NodeOutputPin } from "./Pins";
 import { useMemo } from "preact/hooks";
 import { JSX } from "preact";
 import { getNodeColors } from "@Noodle/ui/styles/NodeStyles";
 
 interface Props {
-    node: NodeDefinition;
+    node: NodeDefinition<string, string>;
     position: [number, number];
-    type?: string;
 }
 
-const splitOutExecutionPins = <T extends NodePin>(pins: T[]): [execution: T[], other: T[]] => {
-    const execs: T[] = [];
-    const others: T[] = [];
-
-    for (const pin of pins) {
-        if (pin.type === PinType.Execution) execs.push(pin);
-        else others.push(pin)
+const splitPins = (pins : NodePin[]) => {
+    const inExec : NodePin[] = [], inPins : NodePin[] = [], outExec : NodePin[] = [], outPins : NodePin[] = [];
+    
+    for(const pin of pins) {
+        const isOutput = pin.direction === "Output";
+        const d = pin.type === "Execution" ? (isOutput ? outExec : inExec) : (isOutput ? outPins : inPins);
+        d.push(pin);
     }
 
-    return [execs, others];
+    return [inExec, inPins, outExec, outPins] as const;
 }
 
-export function Node(props: Props) {
+export function NodeRender(props: Props) {
     const { node } = props;
-    const [inputExec, inputOthers] = useMemo(() => splitOutExecutionPins(node.inputs), [node.inputs]);
-    const [outputExec, outputOthers] = useMemo(() => splitOutExecutionPins(node.outputs), [node.outputs]);
+    const [inExec, inPins, outExec, outPins] = useMemo(() => splitPins(node.pins), [node.pins]);
     const [headerColor, bodyColor] = getNodeColors(node);
-
     return (
         <div class="pointer-events-auto w-fit h-fit absolute select-none" style={{
             left: props.position[0],
@@ -36,19 +32,24 @@ export function Node(props: Props) {
         }}>
             <div class="min-h-fit w-fit shadow-lg shadow-stone-900 group/titlebox">
                 <div class={`rounded-t-lg px-4 py-2 ${headerColor} cursor-grab peer border-2 border-b-0 border-transparent hover:border-blue-500 transition-all`}>
-                    <h1 class="text-[0.9rem]/tight font-bold truncate">{node.title}</h1>
+                    <span class="inline">
+                        <h1 class="inline text-[0.9rem]/tight font-bold truncate">{node.displayName ?? node.type}</h1>
+                        {
+                            node.displayName != null && <h2 class="inline text-xs/tight truncate ml-2">{node.type}</h2>
+                        }
+                    </span>
                 </div>
                 <div class={`rounded-b-lg ${bodyColor} pb-4 pt-2 flex flex-col min-w-[10rem] border-2 border-t-0 border-transparent peer-hover:border-blue-500 transition-all`}>
                     {
-                        (inputExec.length > 0 || outputExec.length > 0) && <div class="flex flex-row justify-between mb-4">
+                        (inExec.length > 0 || outExec.length > 0) && <div class="flex flex-row justify-between mb-4">
                             <div class="flex flex-col space-y-2">
                                 {
-                                    inputExec.map((input, i) => <NodeInputPin pin={input} key={i} />)
+                                    inExec.map((input, i) => <NodeInputPin pin={input} key={i} />)
                                 }
                             </div>
                             <div class="flex flex-col space-y-2">
                                 {
-                                    outputExec.map((output, i) => <NodeOutputPin pin={output} key={i} />)
+                                    outExec.map((output, i) => <NodeOutputPin pin={output} key={i} />)
                                 }
                             </div>
                         </div>
@@ -56,13 +57,13 @@ export function Node(props: Props) {
                     <div class="flex flex-row justify-between mt-2">
                         <div class="flex flex-col space-y-2">
                             {
-                                inputOthers.map((input, i) => <NodeInputPin pin={input} key={i} />)
+                                inPins.map((input, i) => <NodeInputPin pin={input} key={i} />)
                             }
                         </div>
 
                         <div class="flex flex-col space-y-2">
                             {
-                                outputOthers.map((output, i) => <NodeOutputPin pin={output} key={i} />)
+                                outPins.map((output, i) => <NodeOutputPin pin={output} key={i} />)
                             }
                         </div>
                     </div>
