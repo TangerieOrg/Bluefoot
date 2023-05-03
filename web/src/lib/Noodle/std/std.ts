@@ -1,6 +1,7 @@
 import { NodeDefinitionBuilder } from "@Noodle/core/NodeDefinition";
 
 const Add = NodeDefinitionBuilder.create("Add")
+    .tag("Pure")
     .input("a", "Number")
     .input("b", "Number")
     .output("sum", "Number")
@@ -15,6 +16,7 @@ const NumberToString = NodeDefinitionBuilder.create("ToString (Number)")
     .build()
 
 const OnKeyEvent = NodeDefinitionBuilder.create("OnKeyEvent")
+    .tag("Event")
     .displayName("On Key Event")
     .output("Pressed", "Execution")
     .output("Released", "Execution")
@@ -22,16 +24,17 @@ const OnKeyEvent = NodeDefinitionBuilder.create("OnKeyEvent")
     .build()
 
 const StringLength = NodeDefinitionBuilder.create("StringLength")
+    .tag("Pure")
     .displayName("Length (String)")
     .input("String", "String")
     .output("Length", "Number")
     .build()
 
 const LogString = NodeDefinitionBuilder.create("Log String")
+    .tag("Development")
     .input("execute", "Execution")
     .input("String", "String")
     .output("then", "Execution")
-    .tag("Development")
     .build()
 
 export const NoodleSTD = { Add, NumberToString, OnKeyEvent, StringLength, LogString } as const;

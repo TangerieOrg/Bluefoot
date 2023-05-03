@@ -20,8 +20,8 @@ export const PinDirection = {
 } as const;
 export type PinDirection = typeof PinDirection[keyof typeof PinDirection];
 
-export interface NodePin extends OptionalUserDisplayProperties {
-    name : string;
+export interface NodePin<TName extends string = string> extends OptionalUserDisplayProperties {
+    name : TName;
     type : PinType;
     direction: PinDirection;
 }
@@ -35,16 +35,9 @@ export const NodeTag = {
 } as const;
 export type NodeTag = typeof NodeTag[keyof typeof NodeTag];
 
-
-
-// export interface NodeDefinition extends OptionalUserDisplayProperties {
-//     type : string; // The base name of the node
-//     pins : NodePin[];
-//     tags : NodeTag[];
-// }
-
-export interface NodeDefinition<TPinName extends string = never, TTags extends string = never> extends OptionalUserDisplayProperties {
+export interface NodeDefinition<TPinNames extends string = never, TTags extends string = never> extends OptionalUserDisplayProperties {
     type : string; // The base name of the node
-    pins : Array<NodePin>;
+    pins : Array<NodePin<TPinNames>>;
     tags : Array<NodeTag>;
 }
+

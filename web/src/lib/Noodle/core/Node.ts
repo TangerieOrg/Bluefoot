@@ -1,13 +1,21 @@
-import { NodeDefinition, NodePinName} from "@Noodle/types/Node";
+import { NodeDefinition, NodePin} from "@Noodle/types/Node";
 
-export class Node<TDef extends NodeDefinition> {
-    public readonly definition : TDef;
+export class Node<TPinNames extends string> {
+    public readonly definition : NodeDefinition<TPinNames, never>;
 
-    constructor(definition : TDef) {
+    private constructor(definition : NodeDefinition<TPinNames, never>) {
         this.definition = definition;
     }
 
-    // getPinType<K extends NodePinName<TDef["pins"]>>(key : K) {
-        
-    // }
+    public static fromDefinition<TPinNames extends string>(definition : NodeDefinition<TPinNames, never>) {
+        return new Node<TPinNames>(definition)
+    }
+
+    public isPure() : boolean {
+        return this.definition.tags.includes("Pure");
+    }
+
+    public getPin<K extends TPinNames>(name : K) : NodePin<K> {
+        return this.definition.pins.find(x => x.name === name) as NodePin<K>;
+    }
 }

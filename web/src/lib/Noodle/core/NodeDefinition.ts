@@ -1,4 +1,4 @@
-import { NodeDefinition, NodeTag, PinDirection, PinType } from "@Noodle/types/Node";
+import { NodeDefinition, NodePin, NodeTag, PinDirection, PinType } from "@Noodle/types/Node";
 
 type StringExclude<TString, TExclude> = TString extends TExclude ? never : TString;
 
@@ -28,14 +28,19 @@ export class NodeDefinitionBuilder<TPins extends string = never, TTags extends N
             if(direction === "Input") this.hasInputExec = true;
             else this.hasOutputExec = true;
         }
-        
-        this.definition.pins.push({
+
+        const p : NodePin<TName> = {
             name,
             type,
             direction,
             displayName,
             description
-        })
+        }
+
+        const def = this.definition as NodeDefinition<TPins | TName, TTags>;
+        
+        def.pins.push(Object.freeze(p));
+        
         return this;
     }
 
@@ -69,8 +74,14 @@ export class NodeDefinitionBuilder<TPins extends string = never, TTags extends N
         else this.definition.tags.push("Pure")
     }
 
-    build() : NodeDefinition<TPins, TTags> {
+    private freeze() {
+        Object.freeze(this.definition.tags);
+        Object.freeze(this.definition.pins);
+    }
+
+    build() : Readonly<NodeDefinition<TPins, TTags>> {
         if(this.definition.tags.length === 0) this.setImplicitTags();
+        this.freeze();
         return Object.freeze(this.definition)
     }
 }
