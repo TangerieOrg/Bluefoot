@@ -6,7 +6,7 @@ type Props = ComponentProps<typeof Editor>;
 type Story = StoryObj<Props>;
 
 const meta : Meta<Props> = {
-    title: "Noodle/Editor",
+    title: "NoodleUI/Editor",
     component: Editor
 }
 export default meta;

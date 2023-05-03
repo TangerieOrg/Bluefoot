@@ -44,28 +44,9 @@ const config: StorybookConfig = {
       "@assets": getPath("./assets"),
       "@overlays": getPath("./overlays"),
       "@Noodle": getPath("./lib/Noodle"),
-      "@SVGUtil": getPath("./lib/SVGUtil")
+      "@SVGUtil": getPath("./lib/SVGUtil"),
+      "@StorybookUtil": getPath("./lib/StorybookUtil"),
     }
-
-    // config.module.rules = [
-    //   ...config.module.rules,
-    //   {
-    //     exclude: "/node_modules/",
-    //     test: /\.css$/,
-    //     sideEffects: true,
-    //     use: [
-    //       'style-loader',
-    //       {
-    //         loader: 'css-loader',
-    //         options: {
-    //           importLoaders: 1,
-    //           modules: true
-    //         }
-    //       },
-    //       'postcss-loader'
-    //     ]
-    //   }
-    // ]
 
     return config;
   }

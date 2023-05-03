@@ -12,7 +12,7 @@ const RenderNode = (node : StoryProps) => <div class="relative top-0 left-0">
 </div>;
 
 const meta : Meta<StoryProps> = {
-    title: "Noodle/Node",
+    title: "NoodleUI/Node",
     component: NodeComponent,
     tags: ['autodocs']
 }

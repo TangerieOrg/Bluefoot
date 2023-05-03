@@ -1,0 +1,11 @@
+// Only an interface as it does not contain any logic
+public interface node add {
+    inputs {
+        number a(1);
+        number b(1);
+    }
+    
+    outputs {
+        number value;
+    }
+}
