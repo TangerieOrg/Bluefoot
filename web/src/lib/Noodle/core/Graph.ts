@@ -1,4 +1,4 @@
-import { NodeConnection, NodeDefinition, PinPath } from "@Noodle/types/Node";
+import { NodeConnection, NodeDefinition, PinPath } from "@Noodle/core/types/Node";
 import { Node } from "./Node";
 
 export default class Graph {

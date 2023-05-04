@@ -1,4 +1,4 @@
-import { NodeDefinition, NodePin, NodeTag, PinDirection, PinType } from "@Noodle/types/Node";
+import { NodeDefinition, NodePin, NodeTag, PinDirection, PinType } from "@Noodle/core/types/Node";
 
 type StringExclude<TString, TExclude> = TString extends TExclude ? never : TString;
 

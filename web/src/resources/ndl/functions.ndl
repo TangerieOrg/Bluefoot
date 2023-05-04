@@ -1,0 +1,37 @@
+/*
+A function is a subtype of a graph that contains and input and output node and no events.
+A function can be used as a node (but is not a node) => Implementation to be decided.
+
+Inputs/outputs for a function are implemented as 2 special nodes that have the id "Input" and "Output";
+A function with no execution i/o is considered pure 
+and can only contain pure nodes
+*/
+
+function logStringLength {
+    inputs {
+        Execution execute;
+        String input;
+    }
+
+    outputs {
+        Execution then;
+        Number length;
+    }
+
+    nodes {
+        0 stringLength {}
+        1 numberToString {}
+        2 logString {}
+    }
+    /*
+    Similar to graph connections 
+    */
+    connections {
+        Input.input 0.string;
+        Input.execute 1.execute;
+        0.length 1.number;
+        1.then 2.execute;
+        1.string 2.string;
+        2.then Output.execute;
+    }
+}

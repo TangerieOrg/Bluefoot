@@ -1,0 +1,25 @@
+/*
+Nodes are callable from graphs and are just definitions of inputs/outputs.
+Whilst functions can be used like nodes, they are not themselves nodes.
+*/
+
+//@DisplayName ToString (Number)
+public node numberToString {
+    /*
+    Pins are defined as "<type> <name>" or "<type> <name>(<default>)"
+    They can optionally have a default value by providing it in brackets.
+    */
+    inputs {
+        Execution execute;
+        Number number;
+        //@DisplayName Round?
+        Boolean round;
+    }
+
+    outputs {
+        Execution then;
+        String string;
+    }
+
+    tags []
+}

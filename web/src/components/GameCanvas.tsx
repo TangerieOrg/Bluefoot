@@ -1,10 +1,16 @@
 import { useEffect, useRef } from "preact/hooks";
-import { useBluefootInstance } from "@modules/Bluefoot"
+import { useBluefootContext } from "@modules/Bluefoot"
 import { revertConsoleLog } from "@modules/Bluefoot/Logging";
 
 export default function GameCanvas() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const instance = useBluefootInstance(canvasRef);
+    const { init, instance } = useBluefootContext();
+    useEffect(() => {
+        init({
+            canvas: canvasRef.current,
+            container: canvasRef.current?.parentElement
+        })
+    }, []);
 
     useEffect(() => {
         if(!instance) return;

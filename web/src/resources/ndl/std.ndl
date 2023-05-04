@@ -1,0 +1,90 @@
+// @ tags refer to the next item
+// Nodes are implemented in c++ and only contain basic definitions
+
+// @DisplayName Add
+public node add {
+    inputs {
+        Number a(1);
+        Number b(2);
+    }
+    
+    outputs {
+        Number sum;
+    }
+
+    tags [
+        Pure
+    ]
+}
+
+//@DisplayName ToString (Number)
+public node numberToString {
+    inputs {
+        Execution execute;
+        Number number;
+        //@DisplayName Round?
+        Boolean round;
+    }
+
+    outputs {
+        Execution then;
+        String string;
+    }
+}
+
+public node onKeyEvent {
+    outputs {
+        Execution pressed;
+        Execution released;
+        String key;
+    }
+    tags [ Event ]
+}
+
+// @DisplayName Length (String)
+public node stringLength {
+    inputs {
+        String string;
+    }
+
+    outputs {
+        Number length;
+    }
+
+    tags [ Pure ]
+}
+
+public node logString {
+    inputs {
+        Execution execute;
+        String string;
+    }
+
+    outputs {
+        Execution then;
+    }
+
+    tags [ Development ]
+}
+
+public node ifElse {
+	inputs {
+		Execution execute;
+		Boolean condition;
+	}
+	outputs {
+		Execution if;
+		Execution else;
+	}
+}
+
+public node while {
+	inputs {
+		Execution execute;
+		Boolean condition;
+	}
+	outputs {
+		Execution body;
+		Execution end;
+	}
+}

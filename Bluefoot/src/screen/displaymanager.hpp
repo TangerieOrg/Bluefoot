@@ -27,3 +27,5 @@ public:
     void endLoop();
     void setDisplayScale(float scale);
 };
+
+void force_canvas_resize();

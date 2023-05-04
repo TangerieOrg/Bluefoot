@@ -2,12 +2,14 @@
 // https://jyc6f.csb.app/
 
 import EditorViewport from "./EditorViewport";
-import { NodeDefinition } from "@Noodle/types/Node";
-import { useMemo } from "preact/hooks";
+import { NodeDefinition } from "@Noodle/core/types/Node";
+import { useEffect, useMemo } from "preact/hooks";
 import { memo } from "preact/compat";
 import { NoodleSTD } from "@Noodle/std";
 import { NodeRender } from "../Node/NodeRender";
 import NodeConnectionLayer, { NodeConnectionItem } from "./NodeConntectionLayer";
+import { Node } from "@Noodle/core/Node";
+import { useBluefootInstance } from "@modules/Bluefoot";
 
 interface NodePlacement {
     x : number,
@@ -17,15 +19,15 @@ interface NodePlacement {
 }
 
 const nodesToPlace : NodePlacement[] = [
-    { def: NoodleSTD.OnKeyEvent, x: -40, y: 20 },
-    { def: NoodleSTD.StringLength, x: 200, y: 200 },
-    { def: NoodleSTD.NumberToString, x: 450, y: 20 },
-    { def: NoodleSTD.LogString, x: 725, y: 20 },
+    { def: NoodleSTD.onKeyEvent, x: -40, y: 20 },
+    { def: NoodleSTD.stringLength, x: 200, y: 200 },
+    { def: NoodleSTD.numberToString, x: 450, y: 20 },
+    { def: NoodleSTD.logString, x: 725, y: 20 },
 ]
 
 const NodeLayer = memo(({ nodes } : { nodes: NodePlacement[] }) => <div class="pointer-events-none absolute top-0 left-0 w-full h-full">
     {
-        nodes.map(({ x, y, def, id}) => <NodeRender node={def} position={[x, y]} key={id}/>)
+        nodes.map(({ x, y, def, id}) => <NodeRender node={Node.fromDefinition(def)} position={[x, y]} key={id}/>)
     }
 </div>);
 
@@ -67,6 +69,13 @@ export default function Editor() {
             id: i
         }))
     }, []);
+
+    const instance = useBluefootInstance();
+    useEffect(() => {
+        if(!instance) return;
+        const pa = new instance.instance.NoodleParser();
+        console.log(pa, typeof pa, instance.instance.NoodleParser);
+    }, [instance]);
 
     return <EditorViewport 
         initialPosition={[-150, -100]} initialScale={1.2}

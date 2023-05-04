@@ -1,11 +1,11 @@
-import { NodeDefinition, NodePin, PinType } from "@Noodle/types/Node";
+import { NodePin, INode } from "@Noodle/core/types/Node";
 import { NodeInputPin, NodeOutputPin } from "./Pins";
 import { useMemo } from "preact/hooks";
-import { JSX } from "preact";
 import { getNodeColors } from "@Noodle/ui/styles/NodeStyles";
+import { prettyCamelCaseName } from "@Noodle/ui/modules/StringUtil";
 
 interface Props {
-    node: NodeDefinition<string, string>;
+    node: INode<string, string>;
     position: [number, number];
 }
 
@@ -21,22 +21,18 @@ const splitPins = (pins : NodePin[]) => {
     return [inExec, inPins, outExec, outPins] as const;
 }
 
-export function NodeRender(props: Props) {
-    const { node } = props;
-    const [inExec, inPins, outExec, outPins] = useMemo(() => splitPins(node.pins), [node.pins]);
+export function NodeRender({ node, position }: Props) {
+    const [inExec, inPins, outExec, outPins] = useMemo(() => splitPins(node.getPins()), [node.getPins()]);
     const [headerColor, bodyColor] = getNodeColors(node);
     return (
         <div class="pointer-events-auto w-fit h-fit absolute select-none" style={{
-            left: props.position[0],
-            top: props.position[1]
+            left: position[0],
+            top: position[1]
         }}>
             <div class="min-h-fit w-fit shadow-lg shadow-stone-900 group/titlebox">
                 <div class={`rounded-t-lg px-4 py-2 ${headerColor} cursor-grab peer border-2 border-b-0 border-transparent hover:border-blue-500 transition-all`}>
                     <span class="inline">
-                        <h1 class="inline text-[0.9rem]/tight font-bold truncate capitalize">{node.displayName ?? node.type}</h1>
-                        {/* {
-                            node.displayName != null && <h2 class="inline text-xs/tight truncate pl-2">{node.type}</h2>
-                        } */}
+                        <h1 class="inline text-[0.9rem]/tight font-bold truncate capitalize">{node.getDisplayName() ?? prettyCamelCaseName(node.getType())}</h1>
                     </span>
                 </div>
                 <div class={`rounded-b-lg ${bodyColor} pb-4 pt-2 min-w-[10rem] border-2 border-t-0 border-transparent peer-hover:border-blue-500 transition-all`}>

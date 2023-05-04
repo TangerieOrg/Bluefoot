@@ -7,21 +7,26 @@ type CArgs = [
     returnType : string | null,
     argumentTypes : string[],
     args : any[]
-]
+];
 
 export interface BluefootModule {
     _start: EmptyFunction;
     end: EmptyFunction;
     console_log: (...data : any[]) => void;
     ccall: (...args : CArgs) => any;
+    [key : string] : any;
+}
+
+export interface NoodleParser {
+
 }
 
 export default class BluefootInstance {
-    private instance : BluefootModule;
+    public readonly instance : BluefootModule;
 
     constructor(instance : any) {
         this.instance = instance;
-        rebindConsoleLog(this, this.console_log);
+        // rebindConsoleLog(this, this.console_log);
     }
     
     start() {

@@ -1,4 +1,4 @@
-import { NodePin, PinType } from "@Noodle/types/Node";
+import { NodePin, PinType } from "@Noodle/core/types/Node";
 
 const DEFAULT_PIN_COLOR = "text-stone-500";
 

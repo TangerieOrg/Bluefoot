@@ -46,6 +46,7 @@ const config: StorybookConfig = {
       "@Noodle": getPath("./lib/Noodle"),
       "@SVGUtil": getPath("./lib/SVGUtil"),
       "@StorybookUtil": getPath("./lib/StorybookUtil"),
+      "@resources": getPath("./resources"),
     }
 
     return config;

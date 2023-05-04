@@ -8,12 +8,11 @@ export function withHoc<TProps extends {}>(Component : ComponentWithProps<TProps
 
 export default function withHOCs<TProps extends {}>(Component : ComponentWithProps<TProps>, ...hocs : HOCProvider[]) : typeof Component {
     let CombinedHoc : HOCProvider | null = null;
-    for(let HOC of hocs.reverse()) {
-        if(CombinedHoc === null) {
+    for(const HOC of hocs) {
+        if(CombinedHoc == null) {
             CombinedHoc = ({children}) => <HOC>{children}</HOC>
         } else {
-            // @ts-ignore
-            CombinedHoc = ({children}) => <HOC><CurrentHOC>{children}</CurrentHOC></HOC>
+            CombinedHoc = withHoc(CombinedHoc, HOC);
         }
     }
 

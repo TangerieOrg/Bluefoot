@@ -4,13 +4,13 @@ import { NoodleSTD } from "@Noodle/std";
 
 describe("Node Creation", () => {
     it("Should create from definition", () => {
-        const node = Node.fromDefinition(NoodleSTD.Add);
-        expect(node.definition).to.equal(NoodleSTD.Add);
+        const node = Node.fromDefinition(NoodleSTD.add);
+        expect(node.definition).to.equal(NoodleSTD.add);
         
     });
 
     it("Should be frozen", () => {
-        const node = Node.fromDefinition(NoodleSTD.Add);
+        const node = Node.fromDefinition(NoodleSTD.add);
         expect(node.definition).to.be.frozen;
         expect(node.definition.tags).to.be.frozen;
         expect(node.definition.pins).to.be.frozen;
@@ -18,7 +18,7 @@ describe("Node Creation", () => {
     });
     
     it("Should return correct pin data", () => {
-        const node = Node.fromDefinition(NoodleSTD.Add);
+        const node = Node.fromDefinition(NoodleSTD.add);
         expect(node.isPure()).to.be.true;
 
         expect(node.definition.pins).to.have.length(3);

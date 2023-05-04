@@ -1,8 +1,9 @@
 import { Meta, StoryObj } from "@storybook/preact"; 
 import { NodeRender } from "@Noodle/ui/components/Node/NodeRender";
 import { ComponentProps } from "preact";
-import { PinType } from "@Noodle/types/Node";
+import { NodeDefinition, PinType } from "@Noodle/core/types/Node";
 import { NoodleSTD } from "@Noodle/std";
+import { Node as NoodleNode } from "@Noodle/core/Node";
 
 interface Props {
     key : keyof typeof NoodleSTD;
@@ -11,7 +12,7 @@ interface Props {
 type Story = StoryObj<Props>;
 
 const RenderNode = ({ key } : Props) => <div class="relative top-0 left-0">
-    <NodeRender node={NoodleSTD[key]} position={[0, 0]}/>
+    <NodeRender node={NoodleNode.fromDefinition(NoodleSTD[key] as NodeDefinition<string, string>)} position={[0, 0]}/>
 </div>;
 
 const meta : Meta<Props> = {

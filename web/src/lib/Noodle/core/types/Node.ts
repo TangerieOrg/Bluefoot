@@ -53,3 +53,21 @@ export interface NodeState<TPinNames extends string = never> {
     id : number;
     trackedConnections : Set<number>;
 }
+
+export interface INode<TType extends string = string, TPinNames extends string = string> {
+    onRegister(id : number) : void;
+    onRemove() : void;
+    getId() : number;
+    isRegistered() : boolean;
+    isPure() : boolean;
+    getPin<K extends TPinNames>(name : K) : NodePin<K>;
+    getPinsOfType(type : PinType) : NodePin[];
+    getPins() : NodePin[];
+    addConnection(id : number): void;
+    removeConnection(id : number) : void;
+    getAllConnectionIds() : number[];
+    getType() : TType;
+    getTags() : NodeTag[];
+    getDisplayName() : string | undefined;
+    getDescription() : string | undefined;
+}

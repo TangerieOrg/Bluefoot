@@ -9,13 +9,12 @@
 #include "rlImGui.h"
 #include "ui/imgui_theme.hpp"
 
-
-EM_JS(float, body_get_width, (), {
-    return document.body.clientWidth;
+EM_JS(float, get_container_width, (), {
+    return (Module.container ?? document.body).clientWidth;
 });
 
-EM_JS(float, body_get_height, (), {
-    return document.body.clientHeight;
+EM_JS(float, get_container_height, (), {
+    return (Module.container ?? document.body).clientHeight;
 });
 
 EM_JS(float, get_window_dpi, (), {
@@ -25,6 +24,10 @@ EM_JS(float, get_window_dpi, (), {
 EM_BOOL onWindowResize(int eventType, const EmscriptenUiEvent* uiEvent, void* userData) {
     DisplayManager::getInstance().resize();
     return EM_TRUE;
+}
+
+void force_canvas_resize() {
+    DisplayManager::getInstance().resize();
 }
 
 void main_loop(void) {
@@ -53,7 +56,7 @@ void DisplayManager::updateScale() {
 
 void DisplayManager::resize() {
     float targetAspect = targetWidth / targetHeight;
-    float bodyAspect = body_get_width() / body_get_height();
+    float bodyAspect = get_container_width() / get_container_height();
 
     float width = targetWidth;
     float height = targetHeight;
