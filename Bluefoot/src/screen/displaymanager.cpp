@@ -81,7 +81,7 @@ void DisplayManager::startLoop(bf_draw_frame_callback drawer) {
     }
     this->frameDrawer = drawer;
     this->isRunning = true;
-    emscripten_set_main_loop(main_loop, 0, true);
+    emscripten_set_main_loop(main_loop, 0, false);
 }
 
 void DisplayManager::frame() {

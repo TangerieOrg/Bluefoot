@@ -18,7 +18,8 @@ export interface BluefootModule {
 }
 
 export interface NoodleParser {
-
+    setData(data : string) : void;
+    getLineCount() : number;
 }
 
 export default class BluefootInstance {
@@ -26,7 +27,7 @@ export default class BluefootInstance {
 
     constructor(instance : any) {
         this.instance = instance;
-        // rebindConsoleLog(this, this.console_log);
+        rebindConsoleLog(this, this.console_log);
     }
     
     start() {
@@ -40,5 +41,9 @@ export default class BluefootInstance {
     console_log(...data : any[]) {
         const str = data.map(String).join(" ");
         this.instance.console_log(str);
+    }
+
+    NoodleParser() {
+        return new this.instance['NoodleParser'] as NoodleParser;
     }
 }

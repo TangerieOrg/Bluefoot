@@ -4,7 +4,7 @@
 #include "parser/parser.hpp"
 
 
-EMSCRIPTEN_BINDINGS(NoodleParser) {
+EMSCRIPTEN_BINDINGS(bluefoot) {
     emscripten::class_<Noodle::Parser>("NoodleParser")
         .constructor()
         .function("setData", &Noodle::Parser::setData)

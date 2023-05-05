@@ -3,13 +3,14 @@
 
 import EditorViewport from "./EditorViewport";
 import { NodeDefinition } from "@Noodle/core/types/Node";
-import { useEffect, useMemo } from "preact/hooks";
+import { useCallback, useEffect, useMemo } from "preact/hooks";
 import { memo } from "preact/compat";
 import { NoodleSTD } from "@Noodle/std";
 import { NodeRender } from "../Node/NodeRender";
 import NodeConnectionLayer, { NodeConnectionItem } from "./NodeConntectionLayer";
 import { Node } from "@Noodle/core/Node";
 import { useBluefootInstance } from "@modules/Bluefoot";
+import BluefootInstance from "@modules/Bluefoot/BluefootInstance";
 
 interface NodePlacement {
     x : number,
@@ -63,6 +64,7 @@ const connections : NodeConnectionItem[] = [
 
 
 export default function Editor() {
+    const instance = useBluefootInstance();
     const nodes = useMemo<NodePlacement[]>(() => {
         return nodesToPlace.map((n, i) => ({
             ...n,
@@ -70,16 +72,17 @@ export default function Editor() {
         }))
     }, []);
 
-    const instance = useBluefootInstance();
     useEffect(() => {
         if(!instance) return;
-        const pa = new instance.instance.NoodleParser();
-        console.log(pa, typeof pa, instance.instance.NoodleParser);
+        const pa = instance.NoodleParser();
+        
+        pa.setData("Hi\nHi");
+        console.log(pa.getLineCount());
     }, [instance]);
 
     return <EditorViewport 
         initialPosition={[-150, -100]} initialScale={1.2}
-        >
+    >
         <NodeConnectionLayer connections={connections}/>
         <NodeLayer nodes={nodes}/>
     </EditorViewport>

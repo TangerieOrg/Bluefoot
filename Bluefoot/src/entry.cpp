@@ -34,19 +34,16 @@ void draw() {
 namespace Entry {
 void start() {
     SetTraceLogCallback(NullLogger);
-    // Its required for some reason
-    emscripten_sleep(1);
-    debug("Bluefoot Starting...");
+    printf("Bluefoot Starting...\n");
     DisplayManager::getInstance().init(Vector2{1920, 1080}, 1);
     
     DisplayManager::getInstance().startLoop(draw);
-
-    CloseWindow();
 }
 
 void end() {
     debug("Bluefoot Ending...\n");
     rlImGuiShutdown();
     DisplayManager::getInstance().endLoop();
+    CloseWindow();
 }
 }

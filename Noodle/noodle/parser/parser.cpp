@@ -6,7 +6,7 @@ void Parser::setData(std::string d) {
 }
 
 int Parser::getLineCount() {
-    int count = 0;
+    int count = 1;
     
     for(int i = 0; i < data.size(); i++) {
         if(data.at(i) == '\n') count++;
