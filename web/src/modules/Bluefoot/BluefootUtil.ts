@@ -1,4 +1,4 @@
-import { CMap, CVector } from "./types";
+import { CMap, CVector, NoodleElement, NoodleParser, ParsedNoodleElement } from "./types";
 
 export function CVectorToArray<T>(vec : CVector<T>) {
     const arr : T[] = [];
@@ -18,4 +18,12 @@ export function CMapToObject<K extends string, V>(map : CMap<K, V>, keys : CVect
     }
 
     return out;
+}
+
+export function ParseNoodleElements(els : CVector<NoodleElement>, pa : NoodleParser) : Array<ParsedNoodleElement> {
+    return CVectorToArray(els).map(el => ({
+        ...el,
+        metadata: CMapToObject(el.metadata, pa.getMetadataKeys(el)),
+        children: ParseNoodleElements(el.children, pa)
+    }))
 }

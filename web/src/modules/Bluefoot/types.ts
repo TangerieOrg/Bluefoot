@@ -22,6 +22,13 @@ export interface NoodleElement {
     children: CVector<NoodleElement>;
 }
 
+export interface ParsedNoodleElement {
+    name : string;
+    type : string;
+    metadata: Record<string, string>;
+    children: Array<ParsedNoodleElement>;
+}
+
 export interface NoodleParser {
     parse() : void;
     setData(data : string) : void;

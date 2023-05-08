@@ -1,9 +1,11 @@
 import { useBluefootInstance } from '@modules/Bluefoot';
 import { useEffect, useState } from 'preact/hooks';
 import JSONPretty from 'react-json-pretty';
-import { CMapToObject, CVectorToArray } from "@modules/Bluefoot/BluefootUtil";
-import { NoodleElement, NoodleParser } from '@modules/Bluefoot/types';
+import { CVectorToArray, ParseNoodleElements } from "@modules/Bluefoot/BluefootUtil";
 import { ComponentChildren } from 'preact';
+import { useOverlayState } from '@modules/OverlayManager';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const TEST_NDL = `
 // @DisplayName ToString (Number)
@@ -48,7 +50,6 @@ node add {
 
     tags [
         Pure
-        Development
     ]
 }
 `;
@@ -62,38 +63,17 @@ const JSON_THEME : Record<string, string> = {
     boolean: 'color:#448aa9;',
 }
 
-function convertElement(el : NoodleElement, pa : NoodleParser) : any {
-    return {
-        ...el,
-        metadata: CMapToObject(el.metadata, pa.getMetadataKeys(el)),
-        children: CVectorToArray(el.children).map(x => convertElement(x, pa))
-    }
-}
 
-function getParserElements(pa : NoodleParser) {
-    return CVectorToArray(pa.getElements()).map(x => convertElement(x, pa));
-}
-
-function getParserTokens(pa : NoodleParser) {
-    return CVectorToArray(pa.getTokens());
-}
-
-const RawNDLPanel = ({ndl} : {ndl : string}) => {
-    return <div class="w-full h-full bg-stone-800 flex flex-row overflow-y-auto">
-        <pre class="h-full py-4 pl-4 pr-2 opacity-75 text-right bg-stone-700">
-            {ndl.split("\n").map((x, i) => <pre>{i}</pre>)}
-        </pre>
-        <pre class="w-full h-full bg-stone-800 p-4 overflow-x-auto">
-            {ndl}
-        </pre>
-    </div>
-}
 
 const Panel = ({children} : {children : ComponentChildren}) => <div class="w-full h-full bg-stone-800 overflow-y-auto">
-    <pre class="w-full h-full p-4 overflow-x-auto overflow-y-auto">
+    <pre class="w-full h-full p-4 overflow-x-auto">
         {children}
     </pre>
 </div>
+
+const RawNDLPanel = ({ndl} : {ndl : string}) => {
+    return <Panel>{ndl}</Panel>
+}
 
 const JSONPanel = ({data} : {data : any}) => <Panel>
     <JSONPretty data={data} theme={JSON_THEME}/>
@@ -102,6 +82,8 @@ const JSONPanel = ({data} : {data : any}) => <Panel>
 type ViewPanelType = "Raw" | "Token" | "Element"; 
 
 export default function NoodleOverlay() {
+    const { setCurrent } = useOverlayState();
+    
     const instance = useBluefootInstance();
     const [tokens, setTokens] = useState<any[]>([]);
     const [elements, setElements] = useState<any[]>([]);
@@ -111,7 +93,7 @@ export default function NoodleOverlay() {
     ]);
     const [currentNDL, setCurrentNDL] = useState([
         ADD_NDL,
-        // TEST_NDL
+        TEST_NDL
     ].join('\n'));
 
     useEffect(() => {
@@ -121,17 +103,29 @@ export default function NoodleOverlay() {
         pa.setData(currentNDL);
         pa.parse();
         
-        setTokens(getParserTokens(pa));
-        setElements(getParserElements(pa));
+        setTokens(CVectorToArray(pa.getTokens()));
+        setElements(ParseNoodleElements(pa.getElements(), pa));
     }, [instance, currentNDL]);
 
-    return <div class="w-screen h-screen bg-stone-900 p-4 grid grid-cols-2 gap-x-4">
-        {
-            viewedPanels.map(x => {
-                if(x == "Raw") return <RawNDLPanel ndl={currentNDL}/>;
-                if(x == "Element") return <JSONPanel data={elements}/>;
-                if(x == "Token") return <JSONPanel data={tokens}/>;
-            })
-        }
+    return <div class="w-screen h-screen bg-stone-900">
+        <div class="fixed top-0 w-full px-6 py-4 bg-stone-900 flex flex-row justify-between select-none">
+            <div class="flex flex-col justify-center">
+                <h1 class="text-xl">Noodle Parser</h1>
+            </div>
+            <div class="flex flex-col justify-center">
+                <button class="text-xl hover:opacity-80 transition-opacity" onClick={() => setCurrent(null)}>
+                    <FontAwesomeIcon icon={solid("close")}/>
+                </button>
+            </div>
+        </div>
+        <div class="h-full p-4 pt-16 grid grid-cols-2 gap-x-4">
+            {
+                viewedPanels.map(x => {
+                    if(x == "Raw") return <RawNDLPanel ndl={currentNDL}/>;
+                    if(x == "Element") return <JSONPanel data={elements}/>;
+                    if(x == "Token") return <JSONPanel data={tokens}/>;
+                })
+            }
+        </div>
     </div> 
 }
