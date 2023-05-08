@@ -2,7 +2,7 @@
 // Nodes are implemented in c++ and only contain basic definitions
 
 // @DisplayName Add
-public node add {
+node add {
     inputs {
         Number a(1);
         Number b(2);
@@ -18,7 +18,7 @@ public node add {
 }
 
 //@DisplayName ToString (Number)
-public node numberToString {
+node numberToString {
     inputs {
         Execution execute;
         Number number;
@@ -32,7 +32,7 @@ public node numberToString {
     }
 }
 
-public node onKeyEvent {
+node onKeyEvent {
     outputs {
         Execution pressed;
         Execution released;
@@ -42,7 +42,7 @@ public node onKeyEvent {
 }
 
 // @DisplayName Length (String)
-public node stringLength {
+node stringLength {
     inputs {
         String string;
     }
@@ -54,7 +54,7 @@ public node stringLength {
     tags [ Pure ]
 }
 
-public node logString {
+node logString {
     inputs {
         Execution execute;
         String string;
@@ -67,7 +67,7 @@ public node logString {
     tags [ Development ]
 }
 
-public node ifElse {
+node ifElse {
 	inputs {
 		Execution execute;
 		Boolean condition;
@@ -78,7 +78,7 @@ public node ifElse {
 	}
 }
 
-public node while {
+node while {
 	inputs {
 		Execution execute;
 		Boolean condition;

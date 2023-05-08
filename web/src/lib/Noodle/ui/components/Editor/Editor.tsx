@@ -9,8 +9,6 @@ import { NoodleSTD } from "@Noodle/std";
 import { NodeRender } from "../Node/NodeRender";
 import NodeConnectionLayer, { NodeConnectionItem } from "./NodeConntectionLayer";
 import { Node } from "@Noodle/core/Node";
-import { useBluefootInstance } from "@modules/Bluefoot";
-import BluefootInstance from "@modules/Bluefoot/BluefootInstance";
 
 interface NodePlacement {
     x : number,
@@ -62,23 +60,13 @@ const connections : NodeConnectionItem[] = [
     end: [end[0] - W, end[1] - H/2 + 6]
 }));
 
-
 export default function Editor() {
-    const instance = useBluefootInstance();
     const nodes = useMemo<NodePlacement[]>(() => {
         return nodesToPlace.map((n, i) => ({
             ...n,
             id: i
         }))
     }, []);
-
-    useEffect(() => {
-        if(!instance) return;
-        const pa = instance.NoodleParser();
-        
-        pa.setData("Hi\nHi");
-        console.log(pa.getLineCount());
-    }, [instance]);
 
     return <EditorViewport 
         initialPosition={[-150, -100]} initialScale={1.2}

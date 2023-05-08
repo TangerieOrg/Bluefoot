@@ -17,7 +17,7 @@ export namespace NDLSerialize {
         if(node.getDisplayName()) lines.push(`// @DisplayName ${node.getDisplayName()}`);
         if(node.getDescription()) lines.push(`// @Description ${node.getDescription()}`);
     
-        lines.push(`public node ${node.getType()} {`);
+        lines.push(`node ${node.getType()} {`);
         const inputs = node.getPins().filter(x => x.direction === "Input");
         const outputs = node.getPins().filter(x => x.direction === "Output");
     

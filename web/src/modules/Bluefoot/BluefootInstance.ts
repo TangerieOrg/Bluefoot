@@ -1,4 +1,5 @@
 import { rebindConsoleLog } from "./Logging";
+import { NoodleParser } from "./types";
 
 type EmptyFunction = () => void;
 
@@ -17,17 +18,14 @@ export interface BluefootModule {
     [key : string] : any;
 }
 
-export interface NoodleParser {
-    setData(data : string) : void;
-    getLineCount() : number;
-}
-
 export default class BluefootInstance {
     public readonly instance : BluefootModule;
 
     constructor(instance : any) {
         this.instance = instance;
-        rebindConsoleLog(this, this.console_log);
+        if(process.env.NODE_ENV === "production") {
+            rebindConsoleLog(this, this.console_log);
+        }
     }
     
     start() {

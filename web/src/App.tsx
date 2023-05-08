@@ -4,6 +4,7 @@ import { BluefootContextProvider } from "@modules/Bluefoot";
 import { OverlayStateProvider, useOverlayState } from "@modules/OverlayManager";
 import withHOCs from "@modules/Util/withHOCs";
 import NoodleEditor from "@overlays/NoodleEditor";
+import ParserOverlay from "@overlays/NoodleEditor/ParserOverlay";
 import { useEffect } from "preact/hooks";
 
 if (process.env.NODE_ENV==='development') {
@@ -16,7 +17,7 @@ function App() {
     const { setCurrent } = useOverlayState();
 
     useEffect(() => {
-        setCurrent(NoodleEditor);
+        setCurrent(ParserOverlay);
     }, []);
 
     return (

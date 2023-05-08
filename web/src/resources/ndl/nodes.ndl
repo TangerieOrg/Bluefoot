@@ -4,7 +4,7 @@ Whilst functions can be used like nodes, they are not themselves nodes.
 */
 
 //@DisplayName ToString (Number)
-public node numberToString {
+node numberToString {
     /*
     Pins are defined as "<type> <name>" or "<type> <name>(<default>)"
     They can optionally have a default value by providing it in brackets.
