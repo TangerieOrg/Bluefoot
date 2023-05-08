@@ -73,7 +73,6 @@ public:
     void setData(std::string data);
     std::vector<NoodleElement> getElements();
     std::vector<Util::Token> getTokens();
-    std::vector<std::string> getMetadataKeys(int index);
-
+    std::vector<std::string> getMetadataKeys(NoodleElement el);
 };
 }

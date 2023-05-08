@@ -27,5 +27,5 @@ export interface NoodleParser {
     setData(data : string) : void;
     getElements() : CVector<NoodleElement>;
     getTokens() : CVector<NoodleToken>;
-    getMetadataKeys(index : number) : CVector<string>;
+    getMetadataKeys(el : NoodleElement) : CVector<string>;
 }

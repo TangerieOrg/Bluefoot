@@ -47,8 +47,8 @@ EMSCRIPTEN_BINDINGS(Noodle) {
     ;
 
     value_object<NoodleElement>("NoodleElement")
-        .field("name", &NoodleElement::name)
         .field("type", &NoodleElement::type)
+        .field("name", &NoodleElement::name)
         .field("metadata", &NoodleElement::metadata)
         .field("children", &NoodleElement::children)
     ;

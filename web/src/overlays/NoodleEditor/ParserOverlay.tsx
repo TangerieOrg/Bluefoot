@@ -2,10 +2,10 @@ import { useBluefootInstance } from '@modules/Bluefoot';
 import { useEffect, useState } from 'preact/hooks';
 import JSONPretty from 'react-json-pretty';
 import { CMapToObject, CVectorToArray } from "@modules/Bluefoot/BluefootUtil";
-import { NoodleParser } from '@modules/Bluefoot/types';
+import { NoodleElement, NoodleParser } from '@modules/Bluefoot/types';
 import { ComponentChildren } from 'preact';
 
-const TEST_NDL = `   
+const TEST_NDL = `
 // @DisplayName ToString (Number)
 node numberToString {
     /*
@@ -30,18 +30,25 @@ node numberToString {
 
 const ADD_NDL = `
 // @DisplayName Add
+// @Description Returns the sum of a and b
 node add {
     inputs {
+        // @DisplayName A
+        // @Description First Number
         Number a(1);
+        // @Description Second Number
+        // @DisplayName B
         Number b(2);
     }
     
     outputs {
+        // @DisplayName Sum Result
         Number sum;
     }
 
     tags [
         Pure
+        Development
     ]
 }
 `;
@@ -55,17 +62,16 @@ const JSON_THEME : Record<string, string> = {
     boolean: 'color:#448aa9;',
 }
 
+function convertElement(el : NoodleElement, pa : NoodleParser) : any {
+    return {
+        ...el,
+        metadata: CMapToObject(el.metadata, pa.getMetadataKeys(el)),
+        children: CVectorToArray(el.children).map(x => convertElement(x, pa))
+    }
+}
+
 function getParserElements(pa : NoodleParser) {
-    const outputData : any[] = [];
-    const els = CVectorToArray(pa.getElements());
-    for(let i = 0; i < els.length; i++) {
-        outputData.push({
-            ...els[i], 
-            metadata: CMapToObject(els[i].metadata, pa.getMetadataKeys(i)),
-            children: CVectorToArray(els[i].children)
-        })
-    } 
-    return outputData;
+    return CVectorToArray(pa.getElements()).map(x => convertElement(x, pa));
 }
 
 function getParserTokens(pa : NoodleParser) {
@@ -93,12 +99,20 @@ const JSONPanel = ({data} : {data : any}) => <Panel>
     <JSONPretty data={data} theme={JSON_THEME}/>
 </Panel>
 
+type ViewPanelType = "Raw" | "Token" | "Element"; 
+
 export default function NoodleOverlay() {
     const instance = useBluefootInstance();
     const [tokens, setTokens] = useState<any[]>([]);
     const [elements, setElements] = useState<any[]>([]);
-    const [viewRaw, setViewRaw] = useState(false);
-    const [currentNDL, setCurrentNDL] = useState(ADD_NDL);
+    const [viewedPanels, setViewedPanels] = useState<[ViewPanelType, ViewPanelType]>([
+        "Raw",
+        "Element"
+    ]);
+    const [currentNDL, setCurrentNDL] = useState([
+        ADD_NDL,
+        // TEST_NDL
+    ].join('\n'));
 
     useEffect(() => {
         if(!instance) return;
@@ -113,13 +127,11 @@ export default function NoodleOverlay() {
 
     return <div class="w-screen h-screen bg-stone-900 p-4 grid grid-cols-2 gap-x-4">
         {
-            viewRaw ? (<>
-                <RawNDLPanel ndl={currentNDL}/>
-                <JSONPanel data={tokens}/>
-            </>) : (<>
-                <JSONPanel data={tokens}/>
-                <JSONPanel data={elements}/>
-            </>)
+            viewedPanels.map(x => {
+                if(x == "Raw") return <RawNDLPanel ndl={currentNDL}/>;
+                if(x == "Element") return <JSONPanel data={elements}/>;
+                if(x == "Token") return <JSONPanel data={tokens}/>;
+            })
         }
     </div> 
 }

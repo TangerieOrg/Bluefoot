@@ -70,7 +70,7 @@ namespace Noodle {
 void Parser::setData(std::string d) { data = d; }
 std::vector<NoodleElement> Parser::getElements() { return elements; }
 std::vector<Util::Token> Parser::getTokens() { return tokens; }
-std::vector<std::string> Parser::getMetadataKeys(int index) { return elements[index].getMetadataKeys(); }
+std::vector<std::string> Parser::getMetadataKeys(NoodleElement el) { return el.getMetadataKeys(); }
 
 void Parser::parseTokens() {
     auto result = Util::consume(Util::EConsume::Empty, data, index);
@@ -176,7 +176,6 @@ void Parser::parseTokens() {
             });
             break;
         case NDL_VALUE_START:
-            printf("Value Start\n");
             result = Util::consume(Util::EConsume::Value, data, index);
             tokens.push_back(Util::Token {
                 "Value", 
@@ -214,17 +213,105 @@ void Parser::verifyTokens() {
 
 namespace TokenParser {
 
+TokenParseResult map(std::vector<Noodle::Util::Token> tokens, int start) {
+    NoodleElement current;
+    current.type = "Map";
+    current.name = tokens.at(start).value;
+    int endLevel = tokens.at(start + 1).level;
+    int index = start + 2;
+
+    std::map<std::string, std::string> metadata;
+    while(index < tokens.size()) {
+        auto token = tokens.at(index);
+        if(token.level == endLevel) break;
+        if(token.type == "MetaKey") {
+            auto valueToken = tokens.at(index + 1);
+            metadata[token.value] = valueToken.value;
+            index++;
+        }
+
+        if(token.type != "Word") {
+            index++;
+            continue;
+        }
+
+        NoodleElement child {
+            tokens.at(index + 1).value,
+            tokens.at(index).value
+        };
+        
+        child.metadata = metadata;
+        
+        if(tokens.at(index + 2).type == "Value") {
+            NoodleElement valueChild {
+                tokens.at(index + 2).value,
+                "DefaultValue"
+            };
+            child.children.push_back(valueChild);
+            index += 3;
+        } else {
+            index += 2;
+        }
+        current.children.push_back(child);
+        metadata.clear();
+    }
+
+    return TokenParseResult { current, index };
+}
+
+TokenParseResult list(std::vector<Noodle::Util::Token> tokens, int start) {
+    NoodleElement current;
+    current.type = "List";
+    current.name = tokens.at(start).value;
+    int endLevel = tokens.at(start + 1).level;
+    int index = start + 2;
+
+    while(index < tokens.size()) {
+        auto token = tokens.at(index);
+        if(token.level == endLevel) break;
+        
+        if(token.type != "Word") {
+            index++;
+            continue;
+        }
+
+        NoodleElement child {
+            tokens.at(index).value,
+            "ListElement"
+        };
+        
+        
+        current.children.push_back(child);
+        index++;
+    }
+
+    return TokenParseResult { current, index };
+}
+
 TokenParseResult node(std::vector<Noodle::Util::Token> tokens, int start) {
     NoodleElement current;
-    current.type = "node";
+    current.type = "Node";
     current.name = tokens.at(start + 1).value;
-
+    int endLevel = tokens.at(start + 2).level;
     // Next token is a group start
     int index = start + 3;
 
     while(index < tokens.size()) {
         auto token = tokens.at(index);
-        printf("(%s) [%s] %s\n", current.name.c_str(), token.type.c_str(), token.value.c_str());
+
+        if(token.type == "Word") {
+            if(tokens.at(index + 1).type == "GroupStart") {
+                auto mapResult = map(tokens, index);
+                current.children.push_back(mapResult.element);
+                index = mapResult.end;
+            } else if (tokens.at(index + 1).type == "ListStart") {
+                auto listResult = list(tokens, index);
+                current.children.push_back(listResult.element);
+                index = listResult.end;
+            }
+        } 
+
+        if(token.level == endLevel) break;
         index++;
     }
 
@@ -242,22 +329,13 @@ void Parser::parseElements() {
         if(token.type == "Comment") {
             continue;    
         }
-        printf("[%s] %s\n", token.type.c_str(), token.value.c_str());
         if(token.type == "MetaKey") {
             auto valueToken = tokens.at(i + 1);
             metadata[token.value] = valueToken.value;
             i++;
         } 
         else if (token.type == "Word") {
-            // Here's the hard stuff
-            // if(current.type.empty()) {
-            //     current.type = token.value;
-            //     auto next = tokens.at(i + 1);
-            //     current.name = next.value;
-            //     i++;
-            // }
             if(token.value == "node") {
-                printf("Entering Node\n");
                 auto result = TokenParser::node(tokens, i);
                 i = result.end;
                 result.element.metadata = metadata;
