@@ -14,21 +14,23 @@ graph exampleGraph {
     }
     */
     nodes {
-        0 onKeyEvent {}
-        1 stringLength {}
-        2 numberToString {}
-        3 logString {}
+        onKeyEvent_0 onKeyEvent {}
+        stringLength_0 stringLength {}
+        numberToString_0 numberToString {
+            round false;
+        }
+        logString_0 logString {}
     }
 
     /*
     Connections are defined here as "<from> <to>;" where <from> and <to> is "<node_id>.<pin>"
     */
     connections {
-        0.pressed 2.execution;
-        0.key 1.string;
-        1.length 2.number;
-        2.then 3.execute;
-        2.string 3.string;
+        onKeyEvent_0.pressed numberToString_0.execution;
+        onKeyEvent_0.key stringLength_0.string;
+        stringLength_0.length numberToString_0.number;
+        numberToString_0.then logString_0.execute;
+        numberToString_0.string logString_0.string;
     }
 
     /*
@@ -43,9 +45,9 @@ graph exampleGraph {
     "<node_id> <x> <y>;"
     */
     positions {
-        0 -40 20;
-        1 200 200;
-        2 450 20;
-        3 725 20;
+        onKeyEvent_0 -40 20;
+        stringLength_0 200 200;
+        numberToString_0 450 20;
+        logString_0 725 20;
     }
 }

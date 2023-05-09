@@ -1,9 +1,9 @@
-import { CMap, CVector, NoodleElement, NoodleParser, ParsedNoodleElement } from "./types";
+import { NoodleElement, ParsedNoodleElement } from "@Noodle/core/types/Parser";
 
-export function CVectorToArray<T>(vec : CVector<T>) {
+export function CVectorToArray<T>(vec : CVector<T>) : T[] {
     const arr : T[] = [];
 
-    for(let i = 0; i < vec.size(); i++) arr.push(vec.get(i));
+    for(let i = 0; i < vec.size(); i++) arr.push(vec.get(i)!);
 
     return arr;
 }
@@ -13,7 +13,7 @@ export function CMapToObject<K extends string, V>(map : CMap<K, V>, keys : CVect
     const out : Record<K, V> = {} as Record<K, V>;
     
     for(let i = 0; i < keys.size(); i++) {
-        const key = keys.get(i);
+        const key = keys.get(i)!;
         out[key] = map.get(key)!;
     }
 

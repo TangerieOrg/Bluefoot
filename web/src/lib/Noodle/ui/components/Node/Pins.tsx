@@ -20,7 +20,7 @@ export function PinIcon({ pin, ...props } : PinCircleStyle) {
 const EXEC_PIN_NAME = ["execute", "then"];
 const getPrettyPinName = (pin : NodePin) => {
     if(pin.type === PinType.Execution && EXEC_PIN_NAME.includes(pin.name)) return "";
-    return prettyCamelCaseName(pin.name);
+    return pin.displayName ?? prettyCamelCaseName(pin.name);
 }
 
 export function NodeInputPin({ pin } : { pin : NodePin }) {

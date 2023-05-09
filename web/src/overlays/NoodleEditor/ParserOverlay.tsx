@@ -6,53 +6,12 @@ import { ComponentChildren } from 'preact';
 import { useOverlayState } from '@modules/OverlayManager';
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NodeDefinition } from '@Noodle/core/types/Node';
+import { BuildFromNoodleElement } from '@Noodle/core/NodeDefinition';
+import { NodeInnerRender } from '@Noodle/ui/components/Node/NodeRender';
+import { Node } from '@Noodle/core/Node';
 
-const TEST_NDL = `
-// @DisplayName ToString (Number)
-node numberToString {
-    /*
-    Pins are defined as "<type> <name>" or "<type> <name>(<default>)"
-    They can optionally have a default value by providing it in brackets.
-    */
-    inputs {
-        Execution execute;
-        Number number;
-        //@DisplayName Round?
-        Boolean round;
-    }
-
-    outputs {
-        Execution then;
-        String string;
-    }
-
-    tags [ Development ]
-}
-`;
-
-const ADD_NDL = `
-// @DisplayName Add
-// @Description Returns the sum of a and b
-node add {
-    inputs {
-        // @DisplayName A
-        // @Description First Number
-        Number a(1);
-        // @Description Second Number
-        // @DisplayName B
-        Number b(2);
-    }
-    
-    outputs {
-        // @DisplayName Sum Result
-        Number sum;
-    }
-
-    tags [
-        Pure
-    ]
-}
-`;
+import NDL_STD from "bundle-text:../../resources/ndl/std.ndl";
 
 const JSON_THEME : Record<string, string> = {
     main: 'line-height:1.3;color:#748096;overflow:auto;',
@@ -62,8 +21,6 @@ const JSON_THEME : Record<string, string> = {
     value: 'color:#93a3bf;',
     boolean: 'color:#448aa9;',
 }
-
-
 
 const Panel = ({children} : {children : ComponentChildren}) => <div class="w-full h-full bg-stone-800 overflow-y-auto">
     <pre class="w-full h-full p-4 overflow-x-auto">
@@ -76,10 +33,21 @@ const RawNDLPanel = ({ndl} : {ndl : string}) => {
 }
 
 const JSONPanel = ({data} : {data : any}) => <Panel>
+    {/* @ts-ignore */}
     <JSONPretty data={data} theme={JSON_THEME}/>
 </Panel>
 
-type ViewPanelType = "Raw" | "Token" | "Element"; 
+type ViewPanelType = "Raw" | "Token" | "Element" | "NodeData" | "Node"; 
+
+const NodeViewer = ({defs} : {defs : NodeDefinition[]}) => <Panel>
+    <div class="grid grid-cols-2 gap-4">
+        {
+            defs.map((def, i) => <div class="h-full mx-auto flex flex-col justify-center">
+                <NodeInnerRender node={Node.fromDefinition(def)} key={i}/>
+            </div>)
+        }
+    </div>
+</Panel>
 
 export default function NoodleOverlay() {
     const { setCurrent } = useOverlayState();
@@ -87,14 +55,12 @@ export default function NoodleOverlay() {
     const instance = useBluefootInstance();
     const [tokens, setTokens] = useState<any[]>([]);
     const [elements, setElements] = useState<any[]>([]);
+    const [nodes, setNodes] = useState<NodeDefinition[]>([]);
     const [viewedPanels, setViewedPanels] = useState<[ViewPanelType, ViewPanelType]>([
         "Raw",
-        "Element"
+        "Node"
     ]);
-    const [currentNDL, setCurrentNDL] = useState([
-        ADD_NDL,
-        TEST_NDL
-    ].join('\n'));
+    const [currentNDL, setCurrentNDL] = useState<string>(NDL_STD);
 
     useEffect(() => {
         if(!instance) return;
@@ -105,6 +71,7 @@ export default function NoodleOverlay() {
 
         setTokens(CVectorToArray(pa.getTokens()));
         setElements(ParseNoodleElements(pa.getElements()));
+        setNodes(CVectorToArray(pa.getElements()).map(el => BuildFromNoodleElement(el)));
     }, [instance, currentNDL]);
 
     return <div class="w-screen h-screen bg-stone-900">
@@ -124,6 +91,8 @@ export default function NoodleOverlay() {
                     if(x == "Raw") return <RawNDLPanel ndl={currentNDL}/>;
                     if(x == "Element") return <JSONPanel data={elements}/>;
                     if(x == "Token") return <JSONPanel data={tokens}/>;
+                    if(x == "NodeData") return <JSONPanel data={nodes}/>;
+                    if(x == "Node") return <NodeViewer defs={nodes}/>
                 })
             }
         </div>

@@ -1,6 +1,5 @@
 import { NodeDefinitionBuilder } from "@Noodle/core/NodeDefinition";
 
-
 const add = NodeDefinitionBuilder.create("add")
     .displayName("Add")
     .tag("Pure")

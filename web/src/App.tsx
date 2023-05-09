@@ -18,6 +18,7 @@ function App() {
 
     useEffect(() => {
         setCurrent(ParserOverlay);
+        // setCurrent(NoodleEditor);
     }, []);
 
     return (
