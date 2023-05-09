@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "preact/hooks";
-import { useBluefootContext } from "@modules/Bluefoot"
-import { revertConsoleLog } from "@modules/Bluefoot/Logging";
+import { useBluefootContext } from "@Bluefoot"
+import { revertConsoleLog } from "@Bluefoot/Logging";
 
 export default function GameCanvas() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);

@@ -41,10 +41,10 @@
             "@modules/*": ["modules/*"],
             "@assets/*": ["assets/*"],
             "@overlays/*": ["overlays/*"],
-            "@Noodle/*": ["lib/Noodle/*"],
-            "@SVGUtil/*": ["lib/SVGUtil/*"],
-            "@StorybookUtil/*": ["lib/StorybookUtil/*"],
-            "@StorybookUtil": ["lib/StorybookUtil"],
+            "@Noodle/*": ["lib/Bluefoot/Noodle/*"],
+            "@Noodle": ["lib/Bluefoot/Noodle"],
+            "@Bluefoot/*": ["lib/Bluefoot/*"],
+            "@Bluefoot": ["lib/Bluefoot"],
             "@resources/*": ["resources/*"],
         }, /* Specify a set of entries that re-map imports to additional lookup locations. */
         // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
@@ -113,7 +113,6 @@
         "skipLibCheck": true /* Skip type checking all .d.ts files. */
     },
     "include": [
-        "src/**/*",
-        "test/**/*"
+        "src/**/*"
     ]
 }

@@ -37,8 +37,7 @@ export default class BluefootInstance {
     }
 
     console_log(...data : any[]) {
-        const str = data.map(String).join(" ");
-        this.instance.console_log(str);
+        this.instance.console_log(data.map(String).join(" "));
     }
 
     NoodleParser() {

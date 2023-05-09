@@ -1,6 +1,6 @@
 import GameCanvas from "@components/GameCanvas";
 import Overlay from "@components/Overlay";
-import { BluefootContextProvider } from "@modules/Bluefoot";
+import { BluefootContextProvider } from "@Bluefoot";
 import { OverlayStateProvider, useOverlayState } from "@modules/OverlayManager";
 import withHOCs from "@modules/Util/withHOCs";
 import NoodleEditor from "@overlays/NoodleEditor";

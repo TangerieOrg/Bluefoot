@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
+import { useCallback, useMemo, useState } from "preact/hooks";
 import BluefootInstance from "./BluefootInstance";
 import { createSafeContext, useSafeContext } from "@modules/SafeContext";
 import { ComponentChildren } from "preact";
@@ -20,19 +20,20 @@ const WasmURL = new URL(`/res/Bluefoot.wasm`, import.meta.url);
 const Factory : (args : any) => Promise<any> = require(`/res/Bluefoot.js`);
 
 let hasInitRun = false;
+let globalInstance : BluefootInstance | undefined = undefined;
+
+export const getUnsafeBluefootInstance = () => globalInstance;
+
+const bluefootPrint = (...data : any[]) => {
+    const i = getUnsafeBluefootInstance();
+    if(i) i.console_log(...data);
+    else console.log(...data);
+}
 
 export const BluefootContextProvider = ({ children } : { children : ComponentChildren}) => {
     const [instance, setInstance] = useState<BluefootInstance>();
     const [isReady, setIsReady] = useState(false);
     const init = useCallback<BluefootContext["init"]>(async ({ canvas, container }) => {
-        const print = (...data : any) => {
-            if(!instance) {
-                console.log(...data);
-            } else {
-                instance.console_log(...data);
-            }
-        }
-        
         if(instance || hasInitRun) {
             console.error("Bluefoot game has already been created before");
             return;
@@ -42,35 +43,33 @@ export const BluefootContextProvider = ({ children } : { children : ComponentChi
             console.error("Canvas not provided");
             return;
         }
+        
         hasInitRun = true;
 
         const m = await Factory({
             locateFile: () => WasmURL.toString(),
             canvas,
             container,
-            print,
+            print: bluefootPrint,
             noInitialRun: true,
             noExitRuntime: true,
             onRuntimeInitialized: () => setIsReady(true),
         })
         
         await m.ready;
-        setInstance(new BluefootInstance(m))
-
+        globalInstance = new BluefootInstance(m);
+        setInstance(globalInstance);
     }, [instance]);
 
-    const value = useMemo<BluefootContext>(() => ({ instance: isReady ? instance : undefined, init }), [instance, init, isReady]);
+    const value = useMemo<BluefootContext>(() => ({ 
+        instance: isReady ? instance : undefined, 
+        init 
+    }), [instance, init, isReady]);
 
     return <Context.Provider value={value}>
         {children}
     </Context.Provider>
 }
 
-export function useBluefootContext() {
-    return useSafeContext(Context);
-}
-
-export function useBluefootInstance() {
-    const { instance } = useSafeContext(Context);
-    return instance;
-}
+export const useBluefootContext = () => useSafeContext(Context);
+export const useBluefootInstance = () => useBluefootContext().instance;

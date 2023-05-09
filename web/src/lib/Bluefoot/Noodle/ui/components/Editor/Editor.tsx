@@ -1,18 +1,13 @@
-// BaklavaJS Example
-// https://jyc6f.csb.app/
-
 import EditorViewport from "./EditorViewport";
-import { NodeDefinition } from "@Noodle/core/types/Node";
-import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { memo } from "preact/compat";
-import { NoodleSTD } from "@Noodle/std";
 import { NodeRender } from "../Node/NodeRender";
 import NodeConnectionLayer, { NodeConnectionItem } from "./NodeConntectionLayer";
 import { Node } from "@Noodle/core/Node";
-import { useBluefootInstance } from "@modules/Bluefoot";
+import { useBluefootInstance } from "@Bluefoot";
 
 import NDL_STD_RAW from "bundle-text:~/src/resources/ndl/std.ndl";
-import { CVectorToArray } from "@modules/Bluefoot/BluefootUtil";
+import { CVectorToArray } from "@Bluefoot/BluefootUtil";
 import { BuildFromNoodleElement } from "@Noodle/core/NodeDefinition";
 
 interface NodePlacement {
@@ -79,7 +74,6 @@ export default function Editor() {
     useEffect(() => {
         if(!instance) return;
         const pa = instance.NoodleParser();
-
         pa.setData(NDL_STD_RAW);
         pa.parse();
 

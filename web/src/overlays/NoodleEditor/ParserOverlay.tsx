@@ -1,7 +1,7 @@
-import { useBluefootInstance } from '@modules/Bluefoot';
+import { useBluefootInstance } from '@Bluefoot';
 import { useEffect, useState } from 'preact/hooks';
 import JSONPretty from 'react-json-pretty';
-import { CVectorToArray, ParseNoodleElements } from "@modules/Bluefoot/BluefootUtil";
+import { CVectorToArray, ParseNoodleElements } from "@Bluefoot/BluefootUtil";
 import { ComponentChildren } from 'preact';
 import { useOverlayState } from '@modules/OverlayManager';
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
