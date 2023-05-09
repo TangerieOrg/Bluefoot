@@ -3,30 +3,41 @@
 
 import EditorViewport from "./EditorViewport";
 import { NodeDefinition } from "@Noodle/core/types/Node";
-import { useCallback, useEffect, useMemo } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import { memo } from "preact/compat";
 import { NoodleSTD } from "@Noodle/std";
 import { NodeRender } from "../Node/NodeRender";
 import NodeConnectionLayer, { NodeConnectionItem } from "./NodeConntectionLayer";
 import { Node } from "@Noodle/core/Node";
+import { useBluefootInstance } from "@modules/Bluefoot";
+
+import NDL_STD_RAW from "bundle-text:~/src/resources/ndl/std.ndl";
+import { CVectorToArray } from "@modules/Bluefoot/BluefootUtil";
+import { BuildFromNoodleElement } from "@Noodle/core/NodeDefinition";
 
 interface NodePlacement {
     x : number,
     y : number,
-    def : NodeDefinition<string, string>,
+    node : Node,
     id? : number
 }
 
-const nodesToPlace : NodePlacement[] = [
-    { def: NoodleSTD.onKeyEvent, x: -40, y: 20 },
-    { def: NoodleSTD.stringLength, x: 200, y: 200 },
-    { def: NoodleSTD.numberToString, x: 450, y: 20 },
-    { def: NoodleSTD.logString, x: 725, y: 20 },
+interface GraphNode {
+    x : number,
+    y : number,
+    node : string
+}
+
+const graph : GraphNode[] = [
+    { node: "onKeyEvent", x: -40, y: 20 },
+    { node: "stringLength", x: 200, y: 200 },
+    { node: "numberToString", x: 450, y: 20 },
+    { node: "logString", x: 725, y: 20 },
 ]
 
 const NodeLayer = memo(({ nodes } : { nodes: NodePlacement[] }) => <div class="pointer-events-none absolute top-0 left-0 w-full h-full">
     {
-        nodes.map(({ x, y, def, id}) => <NodeRender node={Node.fromDefinition(def)} position={[x, y]} key={id}/>)
+        nodes.map(({ x, y, node, id}) => <NodeRender node={node} position={[x, y]} key={id}/>)
     }
 </div>);
 
@@ -61,17 +72,32 @@ const connections : NodeConnectionItem[] = [
 }));
 
 export default function Editor() {
-    const nodes = useMemo<NodePlacement[]>(() => {
-        return nodesToPlace.map((n, i) => ({
-            ...n,
-            id: i
-        }))
-    }, []);
+    const instance = useBluefootInstance();
+    
+    const [nodes, setNodes] = useState<NodePlacement[]>([]);
+
+    useEffect(() => {
+        if(!instance) return;
+        const pa = instance.NoodleParser();
+
+        pa.setData(NDL_STD_RAW);
+        pa.parse();
+
+        const parsed = CVectorToArray(pa.getElements())
+            .map(el => BuildFromNoodleElement(el));
+
+        setNodes(graph.map(({ node, x, y }, id) => (
+            {
+                node: Node.fromDefinition(parsed.find(p => p.type === node)!),
+                x, y, id  
+            }
+        )));
+    }, [instance]);
 
     return <EditorViewport 
         initialPosition={[-150, -100]} initialScale={1.2}
     >
-        <NodeConnectionLayer connections={connections}/>
+        <NodeConnectionLayer connections={nodes.length > 0 ? connections : []}/>
         <NodeLayer nodes={nodes}/>
     </EditorViewport>
 }
