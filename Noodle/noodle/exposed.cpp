@@ -3,6 +3,7 @@
 #include <string>
 #include "parser/parser.hpp"
 #include "parser/element.hpp"
+#include "macros.hpp"
 
 using namespace emscripten;
 using namespace Noodle;
@@ -46,11 +47,12 @@ EMSCRIPTEN_BINDINGS(Noodle) {
         .field("level", &Util::Token::level)
     ;
 
-    value_object<NoodleElement>("NoodleElement")
-        .field("type", &NoodleElement::type)
-        .field("name", &NoodleElement::name)
-        .field("metadata", &NoodleElement::metadata)
-        .field("children", &NoodleElement::children)
+    class_<NoodleElement>("NoodleElement")
+        .EMPROPERTY(type, NoodleElement)
+        .EMPROPERTY(name, NoodleElement)
+        .EMPROPERTY_GET(metadata, NoodleElement)
+        .EMPROPERTY_GET(children, NoodleElement)
+        .function("getMetadataKeys", &NoodleElement::getMetadataKeys)
     ;
 
     class_<Parser>("NoodleParser")
@@ -58,7 +60,6 @@ EMSCRIPTEN_BINDINGS(Noodle) {
         .function("parse", &Parser::parse)
         .function("setData", &Parser::setData)
         .function("getElements", &Parser::getElements)
-        .function("getMetadataKeys", &Parser::getMetadataKeys)
         .function("getTokens", &Parser::getTokens)
     ;
 

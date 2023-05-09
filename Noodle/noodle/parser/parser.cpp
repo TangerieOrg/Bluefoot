@@ -70,7 +70,6 @@ namespace Noodle {
 void Parser::setData(std::string d) { data = d; }
 std::vector<NoodleElement> Parser::getElements() { return elements; }
 std::vector<Util::Token> Parser::getTokens() { return tokens; }
-std::vector<std::string> Parser::getMetadataKeys(NoodleElement el) { return el.getMetadataKeys(); }
 
 void Parser::parseTokens() {
     auto result = Util::consume(Util::EConsume::Empty, data, index);

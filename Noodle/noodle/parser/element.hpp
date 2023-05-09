@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include "macros.hpp"
 
 namespace Noodle {
 
@@ -32,11 +33,18 @@ struct NoodleBoolean : public NoodleType<bool> {
     std::string type = "Boolean";
 };
 
+
+
+
 struct NoodleElement {
-    std::string name;
-    std::string type;
-    std::map<std::string, std::string> metadata;
+    typedef std::map<std::string, std::string> MetadataType;
+    typedef std::vector<NoodleElement> ChildrenType;
+
+    GETSETPROP(std::string, name);
+    GETSETPROP(std::string, type);
+    GETSETPROP(MetadataType, metadata);
+    GETSETPROP(ChildrenType, children);
+    
     std::vector<std::string> getMetadataKeys();
-    std::vector<NoodleElement> children;
 };
 }

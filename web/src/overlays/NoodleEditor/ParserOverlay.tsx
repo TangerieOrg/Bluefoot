@@ -102,9 +102,9 @@ export default function NoodleOverlay() {
         const pa = instance.NoodleParser();
         pa.setData(currentNDL);
         pa.parse();
-        
+
         setTokens(CVectorToArray(pa.getTokens()));
-        setElements(ParseNoodleElements(pa.getElements(), pa));
+        setElements(ParseNoodleElements(pa.getElements()));
     }, [instance, currentNDL]);
 
     return <div class="w-screen h-screen bg-stone-900">

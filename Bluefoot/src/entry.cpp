@@ -31,6 +31,7 @@ void draw() {
     drawFPS();
 }
 
+
 namespace Entry {
 void start() {
     SetTraceLogCallback(NullLogger);

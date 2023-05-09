@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "element.hpp"
+#include "macros.hpp"
 
 #define NDL_NEWLINE '\n'
 
@@ -73,6 +74,5 @@ public:
     void setData(std::string data);
     std::vector<NoodleElement> getElements();
     std::vector<Util::Token> getTokens();
-    std::vector<std::string> getMetadataKeys(NoodleElement el);
 };
 }

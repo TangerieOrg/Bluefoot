@@ -20,6 +20,7 @@ export interface NoodleElement {
     type : string;
     metadata: CMap<string, string>;
     children: CVector<NoodleElement>;
+    getMetadataKeys : () => CVector<string>;
 }
 
 export interface ParsedNoodleElement {
@@ -34,5 +35,4 @@ export interface NoodleParser {
     setData(data : string) : void;
     getElements() : CVector<NoodleElement>;
     getTokens() : CVector<NoodleToken>;
-    getMetadataKeys(el : NoodleElement) : CVector<string>;
 }
