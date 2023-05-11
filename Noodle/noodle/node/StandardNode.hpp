@@ -1,5 +1,5 @@
 #pragma once
-#include "noodle/graph/interfaces.hpp"
+#include "interfaces.hpp"
 #include "noodle/util/metadata.hpp"
 #include <string>
 #include <vector>

@@ -9,6 +9,7 @@ struct NodePin {
     std::string name;
     std::string type;
     std::string direction;
+    Metadata metadata;
 };
 
 struct PinPath {
@@ -30,7 +31,7 @@ struct INode {
     virtual void onRemove() = 0;
     virtual std::string getId() = 0;
     virtual bool isRegistered() = 0;
-    virtual NodePin getPin(std::string name) = 0;
+    virtual NodePin getPin(std::string id) = 0;
     virtual std::vector<NodePin> getPinsOfType(std::string type) = 0;
     virtual std::vector<NodePin> getPins() = 0;
     virtual std::string getType() = 0;

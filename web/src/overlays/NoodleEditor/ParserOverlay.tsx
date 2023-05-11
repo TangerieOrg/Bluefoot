@@ -57,8 +57,8 @@ export default function NoodleOverlay() {
     const [elements, setElements] = useState<any[]>([]);
     const [nodes, setNodes] = useState<NodeDefinition[]>([]);
     const [viewedPanels, setViewedPanels] = useState<[ViewPanelType, ViewPanelType]>([
-        "Raw",
-        "Node"
+        "Element",
+        "NodeData"
     ]);
     const [currentNDL, setCurrentNDL] = useState<string>(NDL_STD);
 

@@ -1,4 +1,7 @@
 #include "parser.hpp"
+#include <emscripten/emscripten.h>
+#include <emscripten/bind.h>
+#include "noodle/macros.hpp"
 
 namespace Noodle::Util {
 bool isEmpty(const char c) {
@@ -355,5 +358,23 @@ void Parser::parse() {
     parseTokens();
     verifyTokens();
     parseElements();
+}
+
+EMSCRIPTEN_BINDINGS(Noodle) {
+    EM_OBJECT(Util::Token)
+        .field("type", &Util::Token::type)
+        .field("value", &Util::Token::value)
+        .field("start", &Util::Token::start)
+        .field("end", &Util::Token::end)
+        .field("level", &Util::Token::level)
+    ;
+    
+    EM_CLASS(Parser)
+        .constructor()
+        .function("parse", &Parser::parse)
+        .function("setData", &Parser::setData)
+        .function("getElements", &Parser::getElements)
+        .function("getTokens", &Parser::getTokens)
+    ;
 }
 }

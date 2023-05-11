@@ -1,14 +1,10 @@
+import { NoodleMetadata } from "@Noodle/ctypes/Metadata";
+
 export interface NoodleToken {
     name : string;
     type : string;
     start : number;
     end : number;
-}
-
-export interface NoodleMetadata {
-    keys() : CVector<string>;
-    get(key : string) : string;
-    has(key : string) : boolean;
 }
 
 export interface NoodleElement {

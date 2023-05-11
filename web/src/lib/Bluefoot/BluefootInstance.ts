@@ -5,9 +5,10 @@ import { BluefootModule } from "./types";
 export default class BluefootInstance {
     public readonly Module : BluefootModule;
 
-    NoodleParser : BluefootModule["NoodleParser"];
     start: BluefootModule["start"];
     end: BluefootModule["end"];
+    
+    NoodleParser : BluefootModule["NoodleParser"];
 
     manager : NoodleManager;
 
@@ -19,6 +20,7 @@ export default class BluefootInstance {
         }
 
         this.NoodleParser = Module.NoodleParser.bind(Module);
+
         this.start = Module.start.bind(Module);
         this.end = Module.end.bind(Module);
 

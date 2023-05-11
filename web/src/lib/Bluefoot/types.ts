@@ -1,5 +1,7 @@
 import { NoodleElement, NoodleToken } from "@Noodle/core/types/Parser";
 import BluefootInstance from "./BluefootInstance";
+import { NodeDefinition, StandardNode, StaticNodeDefinitionClass } from "@Noodle/ctypes/Node";
+import { Graph, GraphConstructorArguments } from "@Noodle/ctypes/Graph";
 
 export interface NoodleParser {
     parse() : void;
@@ -13,6 +15,9 @@ export interface BluefootModule {
     end: () => void;
     console_log: (data: string) => void;
     NoodleParser: ClassConstructor<NoodleParser>;
+    NoodleNodeDefinition: ClassConstructor<NodeDefinition> & StaticNodeDefinitionClass;
+    NoodleStandardNode: ClassConstructor<StandardNode>;
+    NoodleGraph : ClassConstructor<Graph, GraphConstructorArguments>;
 }
 
 export interface GlobalBluefoot {

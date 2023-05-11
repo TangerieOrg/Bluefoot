@@ -86,6 +86,11 @@ export default function Editor() {
                 x, y, id  
             }
         )));
+
+        const defs = CVectorToArray(pa.getElements())
+            .map(el => instance.Module.NoodleNodeDefinition.fromParserElement(el))
+
+        console.log(defs.map(x => x.type));
     }, [instance]);
 
     return <EditorViewport 

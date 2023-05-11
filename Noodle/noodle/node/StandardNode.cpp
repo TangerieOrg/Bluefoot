@@ -1,5 +1,8 @@
 #include "StandardNode.hpp"
 #include <stdexcept>
+#include <emscripten/emscripten.h>
+#include <emscripten/bind.h>
+#include "noodle/macros.hpp"
 
 namespace Noodle {
 
@@ -32,5 +35,20 @@ std::vector<NodePin> StandardNode::getPinsOfType(std::string type) {
 };
 
 std::vector<NodePin> StandardNode::getPins() { return pins; };
+
+
+
+EMSCRIPTEN_BINDINGS(Noodle) {
+    EM_CLASS(StandardNode)
+        .function("getId", &StandardNode::getId)
+        .function("isRegistered", &StandardNode::isRegistered)
+        .function("getPin", &StandardNode::getPin)
+        .function("getPinsOfType", &StandardNode::getPinsOfType)
+        .function("getPins", &StandardNode::getPins)
+        .function("getType", &StandardNode::getType)
+        .function("getTags", &StandardNode::getTags)
+        .function("getMetadata", &StandardNode::getMetadata)
+    ;
+}
 
 }

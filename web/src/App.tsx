@@ -19,8 +19,8 @@ function App() {
     const { setCurrent } = useOverlayState();
 
     useEffect(() => {
-        setCurrent(ParserOverlay);
-        // setCurrent(NoodleEditor);
+        // setCurrent(ParserOverlay);
+        setCurrent(NoodleEditor);
     }, []);
 
     return (

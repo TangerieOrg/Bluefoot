@@ -16,6 +16,7 @@ public:
     void set(std::string key, std::string value);
     bool has(std::string key);
     void clear();
+    void copy(Metadata m);
 
 private:
     std::vector<std::pair<std::string, std::string>> data;
