@@ -1,11 +1,11 @@
-import type { INode, NodeDefinition, NodePin, NodeState, PinType} from "@Noodle/core/types/Node";
+import type { INodeInstance, NodeDefinition, NodeID, NodePin, NodeState, PinType} from "@Noodle/core/types/Node";
 
 const EmptyState = <TPinNames extends string>() : NodeState<TPinNames> => ({
-    id: -1,
+    id: "",
     trackedConnections: new Set()
 });
 
-export class Node<TType extends string = string, TPinNames extends string = string> implements INode<TType, TPinNames> {
+export class NodeInstance<TType extends string = string, TPinNames extends string = string> implements INodeInstance<TType, TPinNames> {
     public readonly definition : NodeDefinition<TType, TPinNames>;
 
     private state : NodeState<TPinNames> = EmptyState();
@@ -15,7 +15,7 @@ export class Node<TType extends string = string, TPinNames extends string = stri
     }
 
     public static fromDefinition<TType extends string, TPinNames extends string>(definition : NodeDefinition<TType, TPinNames>) {
-        return new Node<TType, TPinNames>(definition);
+        return new NodeInstance<TType, TPinNames>(definition);
     }
 
     public getType(): TType {
@@ -27,12 +27,12 @@ export class Node<TType extends string = string, TPinNames extends string = stri
     public getDisplayName() { return this.definition.displayName; }
     public getDescription() { return this.definition.description; }
 
-    public onRegister(id : number) {
+    public onRegister(id : NodeID) {
         this.state.id = id;
     }
 
     public onRemove() {
-        this.state.id = -1;
+        this.state.id = "";
         this.state.trackedConnections.clear();
     }
 
@@ -41,7 +41,7 @@ export class Node<TType extends string = string, TPinNames extends string = stri
     }
 
     public isRegistered() {
-        return this.state.id > -1;
+        return this.state.id.length > 0;
     }
 
     public isPure() : boolean {

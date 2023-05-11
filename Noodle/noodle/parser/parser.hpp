@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "element.hpp"
-#include "macros.hpp"
+#include "noodle/macros.hpp"
 
 #define NDL_NEWLINE '\n'
 

@@ -1,4 +1,4 @@
-import { INode, NodePin } from "@Noodle/core/types/Node";
+import { INodeInstance, NodePin } from "@Noodle/core/types/Node";
 
 export namespace NDLSerialize {
     export function SerializePins(pins : NodePin<string>[]) : string[] {
@@ -11,7 +11,7 @@ export namespace NDLSerialize {
         return lines;
     }
     
-    export function SerializeNode(node : INode) : string {
+    export function SerializeNode(node : INodeInstance) : string {
         const lines : string[] = [];
     
         if(node.getDisplayName()) lines.push(`// @DisplayName ${node.getDisplayName()}`);

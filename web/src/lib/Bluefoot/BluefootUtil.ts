@@ -1,4 +1,4 @@
-import { NoodleElement, ParsedNoodleElement } from "@Noodle/core/types/Parser";
+import { NoodleElement, NoodleMetadata, ParsedNoodleElement } from "@Noodle/core/types/Parser";
 
 export function CVectorToArray<T>(vec : CVector<T>) : T[] {
     const arr : T[] = [];
@@ -35,10 +35,23 @@ export function CClassToObject<T extends Object>(obj : T) {
     return out as T;
 }
 
+export function NoodleMetadataToObject(m : NoodleMetadata) : Record<string, string> {
+    const data : Record<string, string> = {};
+
+    const keys = m.keys();
+    for(let i = 0; i < keys.size(); i++) {
+        const k = keys.get(i)!;
+        data[k] = m.get(k);
+    }
+
+    return data;
+}
+
 export function ParseNoodleElements(els : CVector<NoodleElement>) : Array<ParsedNoodleElement> {
     return CVectorToArray(els).map(el => ({
-        ...CClassToObject(el),
-        metadata: CMapToObject(el.metadata, el.getMetadataKeys()),
+        name: el.name,
+        type: el.type,
+        metadata: NoodleMetadataToObject(el.metadata),
         children: ParseNoodleElements(el.children)
     }))
 }

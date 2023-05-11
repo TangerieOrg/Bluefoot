@@ -14,5 +14,11 @@
     T N; \
     GETSET(T, N)
 
-#define EMPROPERTY(Name, Prefix) property(#Name, &Prefix::get_##Name,  &Prefix::set_##Name)
-#define EMPROPERTY_GET(Name, Prefix) property(#Name, &Prefix::get_##Name)
+#define EM_PROPERTY(Name, Prefix) property(#Name, &Prefix::get_##Name,  &Prefix::set_##Name)
+#define EM_PROPERTY_GET(Name, Prefix) property(#Name, &Prefix::get_##Name)
+
+#define EM_REGISTER_VECTOR(T) register_vector<T>("vector<" #T ">")
+#define EM_REGISTER_MAP(K, V) register_map<K, V>("map<" #K ", " #V ">")
+
+#define EM_OBJECT(T) value_object<T>("Noodle"#T)
+#define EM_CLASS(T) class_<T>("Noodle"#T)

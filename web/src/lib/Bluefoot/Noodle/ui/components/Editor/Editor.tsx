@@ -3,7 +3,7 @@ import { useEffect, useState } from "preact/hooks";
 import { memo } from "preact/compat";
 import { NodeRender } from "../Node/NodeRender";
 import NodeConnectionLayer, { NodeConnectionItem } from "./NodeConntectionLayer";
-import { Node } from "@Noodle/core/Node";
+import { NodeInstance } from "@Noodle/core/NodeInstance";
 import { useBluefootInstance } from "@Bluefoot";
 
 import NDL_STD_RAW from "bundle-text:~/src/resources/ndl/std.ndl";
@@ -13,7 +13,7 @@ import { BuildFromNoodleElement } from "@Noodle/core/NodeDefinition";
 interface NodePlacement {
     x : number,
     y : number,
-    node : Node,
+    node : NodeInstance,
     id? : number
 }
 
@@ -73,7 +73,7 @@ export default function Editor() {
 
     useEffect(() => {
         if(!instance) return;
-        const pa = instance.NoodleParser();
+        const pa = new instance.NoodleParser();
         pa.setData(NDL_STD_RAW);
         pa.parse();
 
@@ -82,7 +82,7 @@ export default function Editor() {
 
         setNodes(graph.map(({ node, x, y }, id) => (
             {
-                node: Node.fromDefinition(parsed.find(p => p.type === node)!),
+                node: NodeInstance.fromDefinition(parsed.find(p => p.type === node)!),
                 x, y, id  
             }
         )));

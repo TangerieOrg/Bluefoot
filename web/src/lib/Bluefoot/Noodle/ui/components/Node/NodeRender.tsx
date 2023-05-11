@@ -1,4 +1,4 @@
-import { NodePin, INode } from "@Noodle/core/types/Node";
+import { NodePin, INodeInstance } from "@Noodle/core/types/Node";
 import { NodeInputPin, NodeOutputPin } from "./Pins";
 import { useMemo } from "preact/hooks";
 import { getNodeColors } from "@Noodle/ui/styles/NodeStyles";
@@ -6,7 +6,7 @@ import { prettyCamelCaseName } from "@Noodle/ui/modules/StringUtil";
 import { PositionedContainer } from "../common/Positioning";
 
 interface Props {
-    node: INode<string, string>;
+    node: INodeInstance<string, string>;
     position: [number, number];
 }
 

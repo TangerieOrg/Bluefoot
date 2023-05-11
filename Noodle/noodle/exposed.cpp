@@ -1,45 +1,19 @@
 #include <emscripten/emscripten.h>
 #include <emscripten/bind.h>
 #include <string>
-#include "parser/parser.hpp"
-#include "parser/element.hpp"
-#include "macros.hpp"
+#include "noodle/parser/parser.hpp"
+#include "noodle/parser/element.hpp"
+#include "noodle/graph/interfaces.hpp"
+#include "noodle/node/StandardNode.hpp"
+#include "noodle/graph/graph.hpp"
+#include "noodle/macros.hpp"
+#include "noodle/util/metadata.hpp"
 
 using namespace emscripten;
 using namespace Noodle;
 
 EMSCRIPTEN_BINDINGS(Noodle) {
-    value_object<NoodleString>("NoodleString")
-        .field("name", &NoodleString::name)
-        .field("type", &NoodleString::type)
-        .field("defaultValue", &NoodleString::defaultValue)
-    ;
-
-    value_object<NoodleExecution>("NoodleExecution")
-        .field("name", &NoodleExecution::name)
-        .field("type", &NoodleExecution::type)
-        .field("defaultValue", &NoodleExecution::defaultValue)
-    ;
-
-    value_object<NoodleEmpty>("NoodleEmpty")
-        .field("name", &NoodleEmpty::name)
-        .field("type", &NoodleEmpty::type)
-        .field("defaultValue", &NoodleExecution::defaultValue)
-    ;
-
-    value_object<NoodleNumber>("NoodleNumber")
-        .field("name", &NoodleNumber::name)
-        .field("type", &NoodleNumber::type)
-        .field("defaultValue", &NoodleNumber::defaultValue)
-    ;
-
-    value_object<NoodleBoolean>("NoodleBoolean")
-        .field("name", &NoodleBoolean::name)
-        .field("type", &NoodleBoolean::type)
-        .field("defaultValue", &NoodleBoolean::defaultValue)
-    ;
-
-    value_object<Util::Token>("NoodleToken")
+    EM_OBJECT(Util::Token)
         .field("type", &Util::Token::type)
         .field("value", &Util::Token::value)
         .field("start", &Util::Token::start)
@@ -47,15 +21,48 @@ EMSCRIPTEN_BINDINGS(Noodle) {
         .field("level", &Util::Token::level)
     ;
 
-    class_<NoodleElement>("NoodleElement")
-        .EMPROPERTY(type, NoodleElement)
-        .EMPROPERTY(name, NoodleElement)
-        .EMPROPERTY_GET(metadata, NoodleElement)
-        .EMPROPERTY_GET(children, NoodleElement)
-        .function("getMetadataKeys", &NoodleElement::getMetadataKeys)
+    EM_OBJECT(NodePin)
+        .field("name", &NodePin::name)
+        .field("type", &NodePin::type)
+        .field("direction", &NodePin::direction)
     ;
 
-    class_<Parser>("NoodleParser")
+    EM_OBJECT(PinPath)
+        .field("nodeId", &PinPath::nodeId)
+        .field("pinName", &PinPath::pinName)
+    ;
+
+    EM_OBJECT(NodeConnection)
+        .field("id", &NodeConnection::id)
+        .field("from", &NodeConnection::from)
+        .field("to", &NodeConnection::to)
+    ;
+
+    EM_CLASS(Metadata)
+        .function("keys", &Metadata::keys)
+        .function("get", &Metadata::get)
+        .function("has", &Metadata::has)
+    ;
+
+    EM_CLASS(StandardNode)
+        .function("getId", &StandardNode::getId)
+        .function("isRegistered", &StandardNode::isRegistered)
+        .function("getPin", &StandardNode::getPin)
+        .function("getPinsOfType", &StandardNode::getPinsOfType)
+        .function("getPins", &StandardNode::getPins)
+        .function("getType", &StandardNode::getType)
+        .function("getTags", &StandardNode::getTags)
+        .function("getMetadata", &StandardNode::getMetadata)
+    ;
+
+    EM_CLASS(NoodleElement)
+        .EM_PROPERTY(type, NoodleElement)
+        .EM_PROPERTY(name, NoodleElement)
+        .EM_PROPERTY_GET(metadata, NoodleElement)
+        .EM_PROPERTY_GET(children, NoodleElement)
+    ;
+
+    EM_CLASS(Parser)
         .constructor()
         .function("parse", &Parser::parse)
         .function("setData", &Parser::setData)
@@ -63,8 +70,9 @@ EMSCRIPTEN_BINDINGS(Noodle) {
         .function("getTokens", &Parser::getTokens)
     ;
 
-    register_vector<NoodleElement>("VectorNoodleElement");
-    register_vector<Util::Token>("VectorNoodleToken");
-    register_vector<std::string>("VectorString");
-    register_map<std::string, std::string>("MapStringString");
+    EM_REGISTER_VECTOR(NoodleElement);
+    EM_REGISTER_VECTOR(Util::Token);
+    EM_REGISTER_VECTOR(std::string);
+    EM_REGISTER_VECTOR(int);
+    EM_REGISTER_VECTOR(NodePin);
 }

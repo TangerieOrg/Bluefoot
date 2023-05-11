@@ -1,7 +1,3 @@
-// @ tags refer to the next item
-// Nodes are implemented in js and only contain basic definitions
-
-// @DisplayName Add
 node add {
     inputs {
         Number a(1);

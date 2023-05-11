@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NodeDefinition } from '@Noodle/core/types/Node';
 import { BuildFromNoodleElement } from '@Noodle/core/NodeDefinition';
 import { NodeInnerRender } from '@Noodle/ui/components/Node/NodeRender';
-import { Node } from '@Noodle/core/Node';
+import { NodeInstance } from '@Noodle/core/NodeInstance';
 
 import NDL_STD from "bundle-text:../../resources/ndl/std.ndl";
 
@@ -43,7 +43,7 @@ const NodeViewer = ({defs} : {defs : NodeDefinition[]}) => <Panel>
     <div class="grid grid-cols-2 gap-4">
         {
             defs.map((def, i) => <div class="h-full mx-auto flex flex-col justify-center">
-                <NodeInnerRender node={Node.fromDefinition(def)} key={i}/>
+                <NodeInnerRender node={NodeInstance.fromDefinition(def)} key={i}/>
             </div>)
         }
     </div>
@@ -65,7 +65,7 @@ export default function NoodleOverlay() {
     useEffect(() => {
         if(!instance) return;
         
-        const pa = instance.NoodleParser();
+        const pa = new instance.NoodleParser();
         pa.setData(currentNDL);
         pa.parse();
 

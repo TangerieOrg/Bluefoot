@@ -13,12 +13,14 @@ if (process.env.NODE_ENV==='development') {
     require("preact/debug");
 }
 
+window.bluefoot = {};
+
 function App() {
     const { setCurrent } = useOverlayState();
 
     useEffect(() => {
-        // setCurrent(ParserOverlay);
-        setCurrent(NoodleEditor);
+        setCurrent(ParserOverlay);
+        // setCurrent(NoodleEditor);
     }, []);
 
     return (

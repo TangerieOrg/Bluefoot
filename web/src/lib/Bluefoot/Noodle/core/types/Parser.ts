@@ -5,12 +5,17 @@ export interface NoodleToken {
     end : number;
 }
 
+export interface NoodleMetadata {
+    keys() : CVector<string>;
+    get(key : string) : string;
+    has(key : string) : boolean;
+}
+
 export interface NoodleElement {
     name : string;
     type : string;
-    metadata: CMap<string, string>;
+    metadata: NoodleMetadata;
     children: CVector<NoodleElement>;
-    getMetadataKeys : () => CVector<string>;
 }
 
 export interface ParsedNoodleElement {

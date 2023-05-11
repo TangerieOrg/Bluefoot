@@ -18,15 +18,15 @@ function NoodleToPinArgs(el : NoodleElement) : ArgsType<NodeDefinitionBuilder<st
     return [
         el.name,
         el.type as PinType,
-        el.metadata.get("DisplayName"),
-        el.metadata.get("Description"),
+        el.metadata.has("DisplayName") ? el.metadata.get("DisplayName") : undefined,
+        el.metadata.has("Description") ? el.metadata.get("Description") : undefined,
     ];
 }
 
 export function BuildFromNoodleElement(el : NoodleElement) : NodeDefinition {
     const builder = NodeDefinitionBuilder.create(el.name);
-    if(el.metadata.get("DisplayName")) builder.displayName(el.metadata.get("DisplayName")!);
-    if(el.metadata.get("Description")) builder.description(el.metadata.get("Description")!);
+    if(el.metadata.has("DisplayName")) builder.displayName(el.metadata.get("DisplayName")!);
+    if(el.metadata.has("Description")) builder.description(el.metadata.get("Description")!);
 
     for(let i = 0; i < el.children.size(); i++) {
         const child = el.children.get(i)!;

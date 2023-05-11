@@ -1,4 +1,4 @@
-import { INode, NodeTag } from "@Noodle/core/types/Node";
+import { INodeInstance, NodeTag } from "@Noodle/core/types/Node";
 
 const DEFAULT_NODE_COLORS : [string, string] = ["bg-stone-800", "bg-stone-700"];
 
@@ -8,7 +8,7 @@ const NODE_COLORS : Record<NodeTag, [string, string]> = {
     "Development": ["bg-purple-800", "bg-stone-700"]
 };
 
-export function getNodeColors(node : INode<string, string>) : [string, string] {
+export function getNodeColors(node : INodeInstance<string, string>) : [string, string] {
     const tags = node.getTags();
     if(tags.includes("Development")) return NODE_COLORS["Development"];
     if(tags.includes("Event")) return NODE_COLORS["Event"];

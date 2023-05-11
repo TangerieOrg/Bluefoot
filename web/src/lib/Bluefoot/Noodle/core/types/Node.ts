@@ -41,7 +41,9 @@ export interface NodeDefinition<TType extends string = string, TPinNames extends
     tags : Array<NodeTag>;
 }
 
-export type PinPath = [node : number, pin : string]
+export type NodeID = string;
+
+export type PinPath = [node : NodeID, pin : string]
 
 export interface NodeConnection {
     id : number;
@@ -50,14 +52,15 @@ export interface NodeConnection {
 }
 
 export interface NodeState<TPinNames extends string = never> {
-    id : number;
+    id : NodeID;
     trackedConnections : Set<number>;
 }
 
-export interface INode<TType extends string = string, TPinNames extends string = string> {
-    onRegister(id : number) : void;
+
+export interface INodeInstance<TType extends string = string, TPinNames extends string = string> {
+    onRegister(id : NodeID) : void;
     onRemove() : void;
-    getId() : number;
+    getId() : NodeID;
     isRegistered() : boolean;
     isPure() : boolean;
     getPin<K extends TPinNames>(name : K) : NodePin<K>;

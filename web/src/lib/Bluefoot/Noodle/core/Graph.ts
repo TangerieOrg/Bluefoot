@@ -1,5 +1,5 @@
-import { NodeConnection, NodeDefinition, PinPath } from "@Noodle/core/types/Node";
-import { Node } from "./Node";
+import { NodeConnection, NodeDefinition, NodeID, PinPath } from "@Noodle/core/types/Node";
+import { NodeInstance } from "./NodeInstance";
 
 export default class Graph {
     private static _instance : Graph;
@@ -11,7 +11,7 @@ export default class Graph {
     }
 
     private nodeCount : number = 0;
-    private nodes : Map<number, Node> = new Map();
+    private nodes : Map<NodeID, NodeInstance> = new Map();
 
     private connectionCount : number = 0;
     private connections : Map<number, NodeConnection> = new Map();
@@ -27,19 +27,19 @@ export default class Graph {
     }
 
     public createNode(def : NodeDefinition) {
-        const node = Node.fromDefinition(def);
+        const node = NodeInstance.fromDefinition(def);
         this.registerNode(node);
         return node;
     }
 
-    private registerNode(node : Node) {
-        const id = this.nodeCount++;
+    private registerNode(node : NodeInstance) {
+        const id = (this.nodeCount++).toString();
         this.nodes.set(id, node);
         node.onRegister(id);
         return id;
     }
 
-    public removeNode(id : number) {
+    public removeNode(id : NodeID) {
         const node = this.nodes.get(id);
         if(!node) return false;
 
@@ -53,11 +53,11 @@ export default class Graph {
         return Array.from(this.nodes.values())
     }
 
-    public getNode(id : number) {
+    public getNode(id : NodeID) {
         return this.nodes.get(id);
     }
 
-    public hasNode(id : number) {
+    public hasNode(id : NodeID) {
         return this.nodes.has(id);
     }
 

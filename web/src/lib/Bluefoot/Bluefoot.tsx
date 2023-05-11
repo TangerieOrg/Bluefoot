@@ -20,9 +20,8 @@ const WasmURL = new URL(`/res/Bluefoot.wasm`, import.meta.url);
 const Factory : (args : any) => Promise<any> = require(`/res/Bluefoot.js`);
 
 let hasInitRun = false;
-let globalInstance : BluefootInstance | undefined = undefined;
 
-export const getUnsafeBluefootInstance = () => globalInstance;
+export const getUnsafeBluefootInstance = () => window.bluefoot?.instance;
 
 const bluefootPrint = (...data : any[]) => {
     const i = getUnsafeBluefootInstance();
@@ -30,7 +29,7 @@ const bluefootPrint = (...data : any[]) => {
     else console.log(...data);
 }
 
-export const BluefootContextProvider = ({ children } : { children : ComponentChildren}) => {
+export const BluefootContextProvider = ({ children } : ChildrenProps) => {
     const [instance, setInstance] = useState<BluefootInstance>();
     const [isReady, setIsReady] = useState(false);
     const init = useCallback<BluefootContext["init"]>(async ({ canvas, container }) => {
@@ -57,8 +56,7 @@ export const BluefootContextProvider = ({ children } : { children : ComponentChi
         })
         
         await m.ready;
-        globalInstance = new BluefootInstance(m);
-        setInstance(globalInstance);
+        setInstance(new BluefootInstance(m));
     }, [instance]);
 
     const value = useMemo<BluefootContext>(() => ({ 

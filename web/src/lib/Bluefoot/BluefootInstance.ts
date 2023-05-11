@@ -1,46 +1,33 @@
+import NoodleManager from "@Noodle/core/NoodleManager";
 import { rebindConsoleLog } from "./Logging";
-import { NoodleParser } from "./types";
-
-type EmptyFunction = () => void;
-
-type CArgs = [
-    name : string,
-    returnType : string | null,
-    argumentTypes : string[],
-    args : any[]
-];
-
-export interface BluefootModule {
-    _start: EmptyFunction;
-    end: EmptyFunction;
-    console_log: (...data : any[]) => void;
-    ccall: (...args : CArgs) => any;
-    [key : string] : any;
-}
+import { BluefootModule } from "./types";
 
 export default class BluefootInstance {
-    public readonly instance : BluefootModule;
+    public readonly Module : BluefootModule;
 
-    constructor(instance : any) {
-        this.instance = instance;
+    NoodleParser : BluefootModule["NoodleParser"];
+    start: BluefootModule["start"];
+    end: BluefootModule["end"];
+
+    manager : NoodleManager;
+
+    constructor(Module : BluefootModule) {
+        window.bluefoot.instance = this;
+        this.Module = Module;
         if(process.env.NODE_ENV === "production") {
             rebindConsoleLog(this, this.console_log);
         }
+
+        this.NoodleParser = Module.NoodleParser.bind(Module);
+        this.start = Module.start.bind(Module);
+        this.end = Module.end.bind(Module);
+
+        this.manager = new NoodleManager(this.Module);
     }
     
-    start() {
-        return this.instance._start();
-    }
-
-    end() {
-        return this.instance.end();
-    }
 
     console_log(...data : any[]) {
-        this.instance.console_log(data.map(String).join(" "));
+        this.Module.console_log(data.map(String).join(" "));
+        if(process.env.NODE_ENV === "development") console.log(...data);
     }
-
-    NoodleParser() {
-        return new this.instance['NoodleParser'] as NoodleParser;
-    }
-}
+};

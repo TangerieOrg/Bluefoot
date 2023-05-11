@@ -219,13 +219,13 @@ TokenParseResult map(std::vector<Noodle::Util::Token> tokens, int start) {
     int endLevel = tokens.at(start + 1).level;
     int index = start + 2;
 
-    std::map<std::string, std::string> metadata;
+    Metadata metadata;
     while(index < tokens.size()) {
         auto token = tokens.at(index);
         if(token.level == endLevel) break;
         if(token.type == "MetaKey") {
             auto valueToken = tokens.at(index + 1);
-            metadata[token.value] = valueToken.value;
+            metadata.set(token.value, valueToken.value);
             index++;
         }
 
@@ -321,7 +321,7 @@ TokenParseResult node(std::vector<Noodle::Util::Token> tokens, int start) {
 
 
 void Parser::parseElements() {
-    std::map<std::string, std::string> metadata;
+    Metadata metadata;
 
     for(int i = 0; i < tokens.size(); i++) {
         auto token = tokens.at(i);
@@ -330,7 +330,7 @@ void Parser::parseElements() {
         }
         if(token.type == "MetaKey") {
             auto valueToken = tokens.at(i + 1);
-            metadata[token.value] = valueToken.value;
+            metadata.set(token.value, valueToken.value);
             i++;
         } 
         else if (token.type == "Word") {
@@ -356,5 +356,4 @@ void Parser::parse() {
     verifyTokens();
     parseElements();
 }
-
 }
