@@ -1,4 +1,4 @@
-import { useBluefootInstance } from '@Bluefoot';
+import { useBluefootInstance, useBluefootModule } from '@Bluefoot';
 import { useEffect, useState } from 'preact/hooks';
 import JSONPretty from 'react-json-pretty';
 import { CVectorToArray, ParseNoodleElements } from "@Bluefoot/BluefootUtil";
@@ -52,7 +52,7 @@ const NodeViewer = ({defs} : {defs : NodeDefinition[]}) => <Panel>
 export default function NoodleOverlay() {
     const { setCurrent } = useOverlayState();
     
-    const instance = useBluefootInstance();
+    const Module = useBluefootModule();
     const [tokens, setTokens] = useState<any[]>([]);
     const [elements, setElements] = useState<any[]>([]);
     const [nodes, setNodes] = useState<NodeDefinition[]>([]);
@@ -63,16 +63,16 @@ export default function NoodleOverlay() {
     const [currentNDL, setCurrentNDL] = useState<string>(NDL_STD);
 
     useEffect(() => {
-        if(!instance) return;
+        if(!Module) return;
         
-        const pa = new instance.NoodleParser();
+        const pa = new Module.NoodleParser();
         pa.setData(currentNDL);
         pa.parse();
 
         setTokens(CVectorToArray(pa.getTokens()));
         setElements(ParseNoodleElements(pa.getElements()));
         setNodes(CVectorToArray(pa.getElements()).map(el => BuildFromNoodleElement(el)));
-    }, [instance, currentNDL]);
+    }, [Module, currentNDL]);
 
     return <div class="w-screen h-screen bg-stone-900">
         <div class="fixed top-0 w-full px-6 py-4 bg-stone-900 flex flex-row justify-between select-none">

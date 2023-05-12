@@ -1,12 +1,12 @@
-import { NoodleElement, NoodleMetadata, ParsedNoodleElement } from "@Noodle/core/types/Parser";
+import { NoodleElement, ParsedNoodleElement } from "@Noodle/core/types/Parser";
+import { NoodleMetadata } from "@Noodle/ctypes/Metadata";
 
-export function CVectorToArray<T>(vec : CVector<T>) : T[] {
-    const arr : T[] = [];
 
-    for(let i = 0; i < vec.size(); i++) arr.push(vec.get(i)!);
-
-    return arr;
+export function* CVectorIter<T>(vec : CVector<T>) {
+    for(let i = 0; i < vec.size(); i++) yield vec.get(i)!;
 }
+
+export const CVectorToArray = <T,>(vec : CVector<T>) => [...CVectorIter(vec)];
 
 
 export function CMapToObject<K extends string, V>(map : CMap<K, V>, keys : CVector<K>) : Record<K, V> {

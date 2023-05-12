@@ -17,7 +17,7 @@ export default function GameCanvas() {
         instance.start();
 
         return () => {
-            revertConsoleLog();
+            if(process.env.NODE_ENV === "production") revertConsoleLog();
             console.log("Instance Removed");
             instance.end()
         };

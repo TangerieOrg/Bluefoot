@@ -71,3 +71,4 @@ export const BluefootContextProvider = ({ children } : ChildrenProps) => {
 
 export const useBluefootContext = () => useSafeContext(Context);
 export const useBluefootInstance = () => useBluefootContext().instance;
+export const useBluefootModule = () => useBluefootInstance()?.Module;

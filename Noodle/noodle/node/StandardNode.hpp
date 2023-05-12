@@ -1,6 +1,7 @@
 #pragma once
 #include "interfaces.hpp"
 #include "noodle/util/metadata.hpp"
+#include "definition.hpp"
 #include <string>
 #include <vector>
 #include <map>
@@ -32,13 +33,13 @@ private:
     std::string type;
 
 public:
-    static StandardNode fromDefinition(std::string type, std::vector<NodePin> pins, std::vector<std::string> tags, Metadata metadata) {
+    static StandardNode fromDefinition(NodeDefinition def) {
         StandardNode n;
 
-        n.type = type;
-        n.pins = pins;
-        n.tags = tags;
-        n.metadata = metadata;
+        n.type = def.type;
+        n.pins = def.pins;
+        n.tags = def.tags;
+        n.metadata = def.metadata;
 
         return n;
     }

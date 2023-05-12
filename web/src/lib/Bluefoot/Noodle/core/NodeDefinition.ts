@@ -1,5 +1,5 @@
 import { NodeDefinition, NodePin, NodeTag, PinDirection, PinType } from "@Noodle/core/types/Node";
-import { NoodleElement } from "./types/Parser";
+import { NoodleElement } from "../ctypes/Parser";
 import { CVectorToArray } from "@Bluefoot/BluefootUtil";
 
 type StringExclude<TString, TExclude> = TString extends TExclude ? never : TString;

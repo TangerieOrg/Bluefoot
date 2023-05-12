@@ -4,6 +4,7 @@ declare module "*.ndl";
 declare interface CVector<T> {
     size() : number;
     get(i : number) : T | undefined;
+    push_back(el : T) : void;
 }
 
 declare interface CMap<K, V> {

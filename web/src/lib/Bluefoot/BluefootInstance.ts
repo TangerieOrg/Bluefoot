@@ -7,8 +7,6 @@ export default class BluefootInstance {
 
     start: BluefootModule["start"];
     end: BluefootModule["end"];
-    
-    NoodleParser : BluefootModule["NoodleParser"];
 
     manager : NoodleManager;
 
@@ -18,8 +16,6 @@ export default class BluefootInstance {
         if(process.env.NODE_ENV === "production") {
             rebindConsoleLog(this, this.console_log);
         }
-
-        this.NoodleParser = Module.NoodleParser.bind(Module);
 
         this.start = Module.start.bind(Module);
         this.end = Module.end.bind(Module);

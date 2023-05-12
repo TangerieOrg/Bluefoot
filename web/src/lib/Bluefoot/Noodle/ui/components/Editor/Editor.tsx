@@ -4,11 +4,12 @@ import { memo } from "preact/compat";
 import { NodeRender } from "../Node/NodeRender";
 import NodeConnectionLayer, { NodeConnectionItem } from "./NodeConntectionLayer";
 import { NodeInstance } from "@Noodle/core/NodeInstance";
-import { useBluefootInstance } from "@Bluefoot";
+import { useBluefootInstance, useBluefootModule } from "@Bluefoot";
 
 import NDL_STD_RAW from "bundle-text:~/src/resources/ndl/std.ndl";
-import { CVectorToArray } from "@Bluefoot/BluefootUtil";
+import { CVectorIter, CVectorToArray } from "@Bluefoot/BluefootUtil";
 import { BuildFromNoodleElement } from "@Noodle/core/NodeDefinition";
+import { INode } from "@Noodle/ctypes/Node";
 
 interface NodePlacement {
     x : number,
@@ -67,13 +68,13 @@ const connections : NodeConnectionItem[] = [
 }));
 
 export default function Editor() {
-    const instance = useBluefootInstance();
-    
+    const Module = useBluefootModule();
+
     const [nodes, setNodes] = useState<NodePlacement[]>([]);
 
     useEffect(() => {
-        if(!instance) return;
-        const pa = new instance.NoodleParser();
+        if(!Module) return;
+        const pa = new Module.NoodleParser();
         pa.setData(NDL_STD_RAW);
         pa.parse();
 
@@ -86,12 +87,13 @@ export default function Editor() {
                 x, y, id  
             }
         )));
+        
 
         const defs = CVectorToArray(pa.getElements())
-            .map(el => instance.Module.NoodleNodeDefinition.fromParserElement(el))
+            .map(el => Module.NoodleNodeDefinition.fromParserElement(el));
+        console.log(defs[0].pins);
 
-        console.log(defs.map(x => x.type));
-    }, [instance]);
+    }, [Module]);
 
     return <EditorViewport 
         initialPosition={[-150, -100]} initialScale={1.2}

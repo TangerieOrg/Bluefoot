@@ -40,6 +40,7 @@ std::vector<NodePin> StandardNode::getPins() { return pins; };
 
 EMSCRIPTEN_BINDINGS(Noodle) {
     EM_CLASS(StandardNode)
+        .class_function("fromDefinition", &StandardNode::fromDefinition)
         .function("getId", &StandardNode::getId)
         .function("isRegistered", &StandardNode::isRegistered)
         .function("getPin", &StandardNode::getPin)

@@ -25,3 +25,7 @@ export interface INode {
 }
 
 export interface StandardNode extends INode {}
+
+export interface StaticStandardNodeClass {
+    fromDefinition(def : NodeDefinition) : StandardNode;
+}
