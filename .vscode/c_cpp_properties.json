@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${default}",
+                "${workspaceFolder}/Bluefoot/**",
+                "${workspaceFolder}/lib/**",
+                "/home/tangerie/CPPLibs/emsdk/upstream/**",
+                "${workspaceFolder}/Bluefoot/src/**",
+                "${workspaceFolder}/Noodle/**",
+                "${workspaceFolder}/Noodle"
+            ],
+            "defines": [
+                "PLATFORM=Web"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c23",
+            "cppStandard": "c++23",
+            "intelliSenseMode": "linux-clang-x64",
+            "compilerArgs": [
+                "-std=c++23"
+            ]
+        }
+    ],
+    "version": 4
+}
