@@ -1,19 +1,22 @@
-import { NodePin, INodeInstance } from "@Noodle/core/types/Node";
+
 import { NodeInputPin, NodeOutputPin } from "./Pins";
 import { useMemo } from "preact/hooks";
 import { getNodeColors } from "@Noodle/ui/styles/NodeStyles";
 import { prettyCamelCaseName } from "@Noodle/ui/modules/StringUtil";
 import { PositionedContainer } from "../common/Positioning";
+import { INode } from "@Noodle/ctypes/Node";
+import { NodePin } from "@Noodle/ctypes/Interfaces";
+import { CVectorIter } from "@Bluefoot/BluefootUtil";
 
 interface Props {
-    node: INodeInstance<string, string>;
+    node: INode;
     position: [number, number];
 }
 
-const splitPins = (pins: NodePin[]) => {
+const splitPins = (pins: CVector<NodePin>) => {
     const inExec: NodePin[] = [], inPins: NodePin[] = [], outExec: NodePin[] = [], outPins: NodePin[] = [];
 
-    for (const pin of pins) {
+    for (const pin of CVectorIter(pins)) {
         const isOutput = pin.direction === "Output";
         const d = pin.type === "Execution" ? (isOutput ? outExec : inExec) : (isOutput ? outPins : inPins);
         d.push(pin);
@@ -25,11 +28,12 @@ const splitPins = (pins: NodePin[]) => {
 export function NodeInnerRender({ node }: Pick<Props, "node">) {
     const [inExec, inPins, outExec, outPins] = useMemo(() => splitPins(node.getPins()), [node.getPins()]);
     const [headerColor, bodyColor] = getNodeColors(node);
+    const nodeName = node.getMetadata().has("DisplayName") ? node.getMetadata().get("DisplayName") : prettyCamelCaseName(node.getType());
 
     return <div class="h-fit w-fit shadow-lg shadow-stone-900 group/titlebox">
         <div class={`rounded-t-lg px-4 py-2 ${headerColor} cursor-grab peer border-2 border-b-0 border-transparent hover:border-blue-500 transition-all`}>
             <span class="inline">
-                <h1 class="inline text-[0.9rem]/tight font-bold truncate capitalize">{node.getDisplayName() ?? prettyCamelCaseName(node.getType())}</h1>
+                <h1 class="inline text-[0.9rem]/tight font-bold truncate capitalize">{nodeName}</h1>
             </span>
         </div>
         <div class={`rounded-b-lg ${bodyColor} pb-4 pt-2 min-w-[10rem] border-2 border-t-0 border-transparent peer-hover:border-blue-500 transition-all`}>

@@ -1,4 +1,4 @@
-import { PinPath } from "@Noodle/core/types/Node";
+import { PinPath } from "./Node";
 import { NodeConnection, NodeID } from "./Interfaces";
 import { StandardNode } from "./Node";
 

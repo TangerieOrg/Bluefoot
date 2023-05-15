@@ -1,4 +1,4 @@
-import { NoodleElement, NoodleToken } from "@Noodle/core/types/Parser";
+import { NoodleElement, NoodleToken } from "@Noodle/ctypes/Parser";
 import BluefootInstance from "./BluefootInstance";
 import { NodeDefinition, StandardNode, StaticNodeDefinitionClass, StaticStandardNodeClass } from "@Noodle/ctypes/Node";
 import { Graph, GraphConstructorArguments } from "@Noodle/ctypes/Graph";

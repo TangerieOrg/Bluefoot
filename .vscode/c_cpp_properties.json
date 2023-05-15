@@ -6,7 +6,7 @@
                 "${default}",
                 "${workspaceFolder}/Bluefoot/**",
                 "${workspaceFolder}/lib/**",
-                "/home/tangerie/CPPLibs/emsdk/upstream/**",
+                "/home/ubuntu/Coding/emsdk/upstream/**",
                 "${workspaceFolder}/Bluefoot/src/**",
                 "${workspaceFolder}/Noodle/**",
                 "${workspaceFolder}/Noodle"

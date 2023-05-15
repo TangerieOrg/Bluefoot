@@ -3,18 +3,16 @@ import { useEffect, useState } from "preact/hooks";
 import { memo } from "preact/compat";
 import { NodeRender } from "../Node/NodeRender";
 import NodeConnectionLayer, { NodeConnectionItem } from "./NodeConntectionLayer";
-import { NodeInstance } from "@Noodle/core/NodeInstance";
-import { useBluefootInstance, useBluefootModule } from "@Bluefoot";
+import { useBluefootModule } from "@Bluefoot";
 
 import NDL_STD_RAW from "bundle-text:~/src/resources/ndl/std.ndl";
-import { CVectorIter, CVectorToArray } from "@Bluefoot/BluefootUtil";
-import { BuildFromNoodleElement } from "@Noodle/core/NodeDefinition";
+import { CVectorToArray } from "@Bluefoot/BluefootUtil";
 import { INode } from "@Noodle/ctypes/Node";
 
 interface NodePlacement {
     x : number,
     y : number,
-    node : NodeInstance,
+    node : INode,
     id? : number
 }
 
@@ -79,26 +77,21 @@ export default function Editor() {
         pa.parse();
 
         const parsed = CVectorToArray(pa.getElements())
-            .map(el => BuildFromNoodleElement(el));
+            .map(el => Module.NoodleNodeDefinition.fromParserElement(el));
 
         setNodes(graph.map(({ node, x, y }, id) => (
             {
-                node: NodeInstance.fromDefinition(parsed.find(p => p.type === node)!),
+                node: Module.NoodleStandardNode.fromDefinition(parsed.find(p => p.type === node)!),
                 x, y, id  
             }
         )));
-        
-
-        const defs = CVectorToArray(pa.getElements())
-            .map(el => Module.NoodleNodeDefinition.fromParserElement(el));
-        console.log(defs[0].pins);
 
     }, [Module]);
 
     return <EditorViewport 
         initialPosition={[-150, -100]} initialScale={1.2}
     >
-        <NodeConnectionLayer connections={nodes.length > 0 ? connections : []}/>
+        <NodeConnectionLayer connections={connections}/>
         <NodeLayer nodes={nodes}/>
     </EditorViewport>
 }

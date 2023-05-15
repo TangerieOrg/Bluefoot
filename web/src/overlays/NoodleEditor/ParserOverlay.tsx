@@ -6,12 +6,10 @@ import { ComponentChildren } from 'preact';
 import { useOverlayState } from '@modules/OverlayManager';
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { NodeDefinition } from '@Noodle/core/types/Node';
-import { BuildFromNoodleElement } from '@Noodle/core/NodeDefinition';
 import { NodeInnerRender } from '@Noodle/ui/components/Node/NodeRender';
-import { NodeInstance } from '@Noodle/core/NodeInstance';
 
 import NDL_STD from "bundle-text:../../resources/ndl/std.ndl";
+import { NodeDefinition } from '@Noodle/ctypes/Node';
 
 const JSON_THEME : Record<string, string> = {
     main: 'line-height:1.3;color:#748096;overflow:auto;',
@@ -39,16 +37,18 @@ const JSONPanel = ({data} : {data : any}) => <Panel>
 
 type ViewPanelType = "Raw" | "Token" | "Element" | "NodeData" | "Node"; 
 
-const NodeViewer = ({defs} : {defs : NodeDefinition[]}) => <Panel>
-    <div class="grid grid-cols-2 gap-4">
-        {
-            defs.map((def, i) => <div class="h-full mx-auto flex flex-col justify-center">
-                <NodeInnerRender node={NodeInstance.fromDefinition(def)} key={i}/>
-            </div>)
-        }
-    </div>
-</Panel>
-
+const NodeViewer = ({defs} : {defs : NodeDefinition[]}) => {
+    const Module = useBluefootModule();
+    return <Panel>
+        <div class="grid grid-cols-2 gap-4">
+            {
+                defs.map((def, i) => <div class="h-full mx-auto flex flex-col justify-center">
+                    <NodeInnerRender node={Module!.NoodleStandardNode.fromDefinition(def)} key={i}/>
+                </div>)
+            }
+        </div>
+    </Panel>
+}
 export default function NoodleOverlay() {
     const { setCurrent } = useOverlayState();
     
@@ -57,8 +57,8 @@ export default function NoodleOverlay() {
     const [elements, setElements] = useState<any[]>([]);
     const [nodes, setNodes] = useState<NodeDefinition[]>([]);
     const [viewedPanels, setViewedPanels] = useState<[ViewPanelType, ViewPanelType]>([
-        "Element",
-        "NodeData"
+        "Raw",
+        "Node"
     ]);
     const [currentNDL, setCurrentNDL] = useState<string>(NDL_STD);
 
@@ -71,7 +71,7 @@ export default function NoodleOverlay() {
 
         setTokens(CVectorToArray(pa.getTokens()));
         setElements(ParseNoodleElements(pa.getElements()));
-        setNodes(CVectorToArray(pa.getElements()).map(el => BuildFromNoodleElement(el)));
+        setNodes(CVectorToArray(pa.getElements()).map(el => Module.NoodleNodeDefinition.fromParserElement(el)));
     }, [Module, currentNDL]);
 
     return <div class="w-screen h-screen bg-stone-900">

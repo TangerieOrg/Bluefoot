@@ -1,4 +1,5 @@
-import { NodePin, PinType } from "@Noodle/core/types/Node";
+import { NodePin } from "@Noodle/ctypes/Interfaces";
+import { PinType } from "@Noodle/ctypes/Node";
 
 const DEFAULT_PIN_COLOR = "text-stone-500";
 
@@ -15,7 +16,7 @@ export const getPinColorFromType = (ty : PinType) => PIN_COLOR_MAP[ty] ?? DEFAUL
 export function getPinStyle(pin : NodePin) : string {
     const styles : string[] = [];
 
-    styles.push(getPinColorFromType(pin.type));
+    styles.push(getPinColorFromType(pin.type as PinType));
 
     return styles.join(" ");
 }

@@ -1,8 +1,9 @@
-import { NodePin, PinType } from "@Noodle/core/types/Node";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { getPinStyle } from "@Noodle/ui/styles/PinStyles";
 import { prettyCamelCaseName } from "@Noodle/ui/modules/StringUtil";
+import { NodePin } from "@Noodle/ctypes/Interfaces";
+import { PinType } from '@Noodle/ctypes/Node';
 
 export interface PinCircleStyle {
     class?: string;
@@ -20,7 +21,7 @@ export function PinIcon({ pin, ...props } : PinCircleStyle) {
 const EXEC_PIN_NAME = ["execute", "then"];
 const getPrettyPinName = (pin : NodePin) => {
     if(pin.type === PinType.Execution && EXEC_PIN_NAME.includes(pin.name)) return "";
-    return pin.displayName ?? prettyCamelCaseName(pin.name);
+    return pin.metadata.has("DisplayName") ? pin.metadata.get("DisplayName") : prettyCamelCaseName(pin.name);
 }
 
 function NodeValueInput({ pin } : { pin : NodePin }) {
