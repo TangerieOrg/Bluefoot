@@ -77,6 +77,27 @@
         "ratio": "cpp",
         "variant": "cpp",
         "__functional_base": "cpp",
-        "thread": "cpp"
-    }
+        "thread": "cpp",
+        "__bits": "cpp",
+        "__mutex_base": "cpp",
+        "charconv": "cpp",
+        "clocale": "cpp",
+        "codecvt": "cpp",
+        "complex": "cpp",
+        "condition_variable": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "numbers": "cpp",
+        "queue": "cpp",
+        "semaphore": "cpp",
+        "sstream": "cpp",
+        "stack": "cpp",
+        "numeric": "cpp",
+        "stop_token": "cpp",
+        "cfenv": "cpp",
+        "cinttypes": "cpp"
+    },
+    "C_Cpp.codeAnalysis.clangTidy.checks.disabled": [
+        "clang-diagnostic-error"
+    ]
 }

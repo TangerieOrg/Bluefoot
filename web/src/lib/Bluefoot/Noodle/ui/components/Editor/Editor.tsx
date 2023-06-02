@@ -1,5 +1,5 @@
 import EditorViewport from "./EditorViewport";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 import { memo } from "preact/compat";
 import { NodeRender } from "../Node/NodeRender";
 import NodeConnectionLayer, { NodeConnectionItem } from "./NodeConntectionLayer";
@@ -8,13 +8,9 @@ import { useBluefootModule } from "@Bluefoot";
 import NDL_STD_RAW from "bundle-text:~/src/resources/ndl/std.ndl";
 import { CVectorToArray } from "@Bluefoot/BluefootUtil";
 import { INode } from "@Noodle/ctypes/Node";
-
-interface NodePlacement {
-    x : number,
-    y : number,
-    node : INode,
-    id? : number
-}
+import { Graph } from "@Noodle/ctypes/Graph";
+import withHOCs from "@modules/Util/withHOCs";
+import { EditorContextProvider, useEditorContext } from "@Noodle/ui/modules/EditorContext";
 
 interface GraphNode {
     x : number,
@@ -22,18 +18,20 @@ interface GraphNode {
     node : string
 }
 
-const graph : GraphNode[] = [
-    { node: "onKeyEvent", x: -40, y: 20 },
-    { node: "stringLength", x: 200, y: 200 },
-    { node: "numberToString", x: 450, y: 20 },
-    { node: "logString", x: 725, y: 20 },
-]
 
-const NodeLayer = memo(({ nodes } : { nodes: NodePlacement[] }) => <div class="pointer-events-none absolute top-0 left-0 w-full h-full">
-    {
-        nodes.map(({ x, y, node, id}) => <NodeRender node={node} position={[x, y]} key={id}/>)
-    }
-</div>);
+
+const NodeLayer = () => {
+    const { graph } = useEditorContext();
+    if(!graph) return null;
+    return <div class="pointer-events-none absolute top-0 left-0 w-full h-full">
+        {
+            CVectorToArray(graph.getNodeIDs()).map(nodeId => {
+                const {node, x, y} = graph.getNode(nodeId);
+                return <NodeRender node={node} position={[x, y]} key={nodeId}/>
+            })
+        }
+</div>
+};
 
 const W = 14;
 const H = 16;
@@ -65,13 +63,14 @@ const connections : NodeConnectionItem[] = [
     end: [end[0] - W, end[1] - H/2 + 6]
 }));
 
-export default function Editor() {
+function Editor() {
     const Module = useBluefootModule();
 
-    const [nodes, setNodes] = useState<NodePlacement[]>([]);
+    const { graph, advance } = useEditorContext();
 
     useEffect(() => {
-        if(!Module) return;
+        if(!Module || !graph) return undefined;
+
         const pa = new Module.NoodleParser();
         pa.setData(NDL_STD_RAW);
         pa.parse();
@@ -79,19 +78,54 @@ export default function Editor() {
         const parsed = CVectorToArray(pa.getElements())
             .map(el => Module.NoodleNodeDefinition.fromParserElement(el));
 
-        setNodes(graph.map(({ node, x, y }, id) => (
-            {
-                node: Module.NoodleStandardNode.fromDefinition(parsed.find(p => p.type === node)!),
-                x, y, id  
-            }
-        )));
+        const layout : GraphNode[] = [
+            { node: "onKeyEvent", x: -40, y: 20 },
+            { node: "stringLength", x: 200, y: 200 },
+            { node: "numberToString", x: 450, y: 20 },
+            { node: "logString", x: 725, y: 20 },
+        ]
 
-    }, [Module]);
+        const ids = layout.map(p => 
+            graph.createNodeFromDefinition(
+                parsed.find(x => x.type == p.node)!,
+                p.x,
+                p.y
+            )
+        );
+
+        graph.addConnection(
+            { nodeId: ids[0], pinName: "pressed" },
+            { nodeId: ids[2], pinName: "execute" },
+        )
+
+        graph.addConnection(
+            { nodeId: ids[0], pinName: "key" },
+            { nodeId: ids[1], pinName: "string" },
+        )
+
+        graph.addConnection(
+            { nodeId: ids[1], pinName: "length" },
+            { nodeId: ids[2], pinName: "number" },
+        )
+
+        graph.addConnection(
+            { nodeId: ids[2], pinName: "then" },
+            { nodeId: ids[3], pinName: "execute" },
+        )
+
+        graph.addConnection(
+            { nodeId: ids[2], pinName: "string" },
+            { nodeId: ids[3], pinName: "string" },
+        )
+        advance();
+    }, [graph]);
 
     return <EditorViewport 
         initialPosition={[-150, -100]} initialScale={1.2}
     >
-        <NodeConnectionLayer connections={connections}/>
-        <NodeLayer nodes={nodes}/>
+        <NodeLayer/>
+        <NodeConnectionLayer/>
     </EditorViewport>
 }
+
+export default withHOCs(Editor, EditorContextProvider);

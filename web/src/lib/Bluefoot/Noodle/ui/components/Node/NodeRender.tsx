@@ -1,12 +1,13 @@
 
 import { NodeInputPin, NodeOutputPin } from "./Pins";
-import { useMemo } from "preact/hooks";
+import { useEffect, useMemo } from "preact/hooks";
 import { getNodeColors } from "@Noodle/ui/styles/NodeStyles";
 import { prettyCamelCaseName } from "@Noodle/ui/modules/StringUtil";
 import { PositionedContainer } from "../common/Positioning";
 import { INode } from "@Noodle/ctypes/Node";
 import { NodePin } from "@Noodle/ctypes/Interfaces";
 import { CVectorIter } from "@Bluefoot/BluefootUtil";
+import { useEditorContext } from "@Noodle/ui/modules/EditorContext";
 
 interface Props {
     node: INode;
@@ -25,7 +26,11 @@ const splitPins = (pins: CVector<NodePin>) => {
     return [inExec, inPins, outExec, outPins] as const;
 }
 
-export function NodeInnerRender({ node }: Pick<Props, "node">) {
+interface InnerProps extends Pick<Props, "node"> {
+    createPinRef: (name: string) => (el: HTMLElement) => Map<string, HTMLElement>;
+}
+
+export function NodeInnerRender({ node, createPinRef }: InnerProps) {
     const [inExec, inPins, outExec, outPins] = useMemo(() => splitPins(node.getPins()), [node.getPins()]);
     const [headerColor, bodyColor] = getNodeColors(node);
     const nodeName = node.getMetadata().has("DisplayName") ? node.getMetadata().get("DisplayName") : prettyCamelCaseName(node.getType());
@@ -42,12 +47,12 @@ export function NodeInnerRender({ node }: Pick<Props, "node">) {
                     (inExec.length > 0 || outExec.length > 0) && <div class="flex flex-row justify-between mb-4">
                         <div class="flex flex-col space-y-2">
                             {
-                                inExec.map((input, i) => <NodeInputPin pin={input} key={i} />)
+                                inExec.map((input, i) => <NodeInputPin pin={input} key={i} createPinRef={createPinRef}/>)
                             }
                         </div>
                         <div class="flex flex-col space-y-2">
                             {
-                                outExec.map((output, i) => <NodeOutputPin pin={output} key={i} />)
+                                outExec.map((output, i) => <NodeOutputPin pin={output} key={i} createPinRef={createPinRef}/>)
                             }
                         </div>
                     </div>
@@ -55,13 +60,13 @@ export function NodeInnerRender({ node }: Pick<Props, "node">) {
                 <div class="flex flex-row justify-between mt-2">
                     <div class="flex flex-col space-y-2">
                         {
-                            inPins.map((input, i) => <NodeInputPin pin={input} key={i} />)
+                            inPins.map((input, i) => <NodeInputPin pin={input} key={i} createPinRef={createPinRef}/>)
                         }
                     </div>
 
                     <div class="flex flex-col space-y-2">
                         {
-                            outPins.map((output, i) => <NodeOutputPin pin={output} key={i} />)
+                            outPins.map((output, i) => <NodeOutputPin pin={output} key={i} createPinRef={createPinRef}/>)
                         }
                     </div>
                 </div>
@@ -71,9 +76,13 @@ export function NodeInnerRender({ node }: Pick<Props, "node">) {
 }
 
 export function NodeRender({ node, position }: Props) {
+    const { useNodeContext, advance } = useEditorContext();
+    const { pins } = useNodeContext(node.getId());
+    const createPinRef = (name : string) => (el : HTMLElement) => { pins.set(name, el); };
     return (
         <PositionedContainer position={position} class="pointer-events-auto w-fit h-fit select-none">
-            <NodeInnerRender node={node}/>
+            {/* @ts-ignore */}
+            <NodeInnerRender node={node} createPinRef={createPinRef}/>
         </PositionedContainer>
     )
 }

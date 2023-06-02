@@ -5,6 +5,7 @@
 #include <utility>
 #include "noodle/macros.hpp"
 #include "noodle/node/StandardNode.hpp"
+#include "noodle/node/definition.hpp"
 
 namespace Noodle {
 
@@ -27,6 +28,7 @@ public:
     GraphNode getNode(NodeID id);
     void removeNode(NodeID id);
     bool hasNode(NodeID id);
+    std::string createNodeFromDefinition(NodeDefinition def, int x, int y);
 
     void addConnection(PinPath from, PinPath to);
     void removeConnection(int connectionId);
@@ -39,6 +41,7 @@ private:
     std::map<NodeID, GraphNode> nodes;
     std::map<int, NodeConnection> connections;
     int nextConnectionId = 0;
+    int nextNodeId = 0;
 };
 
 }

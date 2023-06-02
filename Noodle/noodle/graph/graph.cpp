@@ -7,6 +7,22 @@ Graph::Graph(std::string _name) {
     name = _name;
 }
 
+NodeID Graph::createNodeFromDefinition(NodeDefinition def, int x, int y) {
+    StandardNode node = StandardNode::fromDefinition(def);
+    NodeID id = std::to_string(nextNodeId);
+    nextNodeId++;
+
+    node.onRegister(id);
+    
+    GraphNode gNode = GraphNode {
+        x, y, node
+    };
+    
+    nodes[id] = gNode;
+
+    return id;
+}
+
 std::vector<std::string> Graph::getNodeIDs() {
     std::vector<std::string> names;
 
@@ -70,7 +86,8 @@ EMSCRIPTEN_BINDINGS(Noodle) {
 
     EM_CLASS(Graph)
         .constructor<std::string>()
-        .function("getNodeNames", &Graph::getNodeIDs)
+        .function("createNodeFromDefinition", &Graph::createNodeFromDefinition)
+        .function("getNodeIDs", &Graph::getNodeIDs)
         .function("getNode", &Graph::getNode)
         .function("removeNode", &Graph::removeNode)
         .function("hasNode", &Graph::hasNode)
@@ -78,7 +95,7 @@ EMSCRIPTEN_BINDINGS(Noodle) {
         .function("removeConnection", &Graph::removeConnection)
         .function("getConnections", &Graph::getConnections)
         .function("clear", &Graph::clear)
-        .EM_PROPERTY_GET(name, Graph)
+        .property("name", &Graph::get_name)
     ;
 }
 }

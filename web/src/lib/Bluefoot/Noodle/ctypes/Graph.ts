@@ -1,5 +1,5 @@
-import { PinPath } from "./Node";
-import { NodeConnection, NodeID } from "./Interfaces";
+import { NodeDefinition } from "./Node";
+import { NodeConnection, NodeID, PinPath } from "./Interfaces";
 import { StandardNode } from "./Node";
 
 export interface GraphNode {
@@ -10,7 +10,8 @@ export interface GraphNode {
 
 export interface Graph {
     readonly name : string;
-    getNodeIDs() : CVector<string>;
+    createNodeFromDefinition(def : NodeDefinition, x : number, y: number) : NodeID;
+    getNodeIDs() : CVector<NodeID>;
     getNode(id : NodeID) : GraphNode;
     removeNode(id : NodeID) : void;
     hasNode(id : NodeID) : boolean;

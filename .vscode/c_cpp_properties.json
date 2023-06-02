@@ -6,10 +6,10 @@
                 "${default}",
                 "${workspaceFolder}/Bluefoot/**",
                 "${workspaceFolder}/lib/**",
-                "/home/ubuntu/Coding/emsdk/upstream/**",
                 "${workspaceFolder}/Bluefoot/src/**",
                 "${workspaceFolder}/Noodle/**",
-                "${workspaceFolder}/Noodle"
+                "${workspaceFolder}/Noodle",
+                "/home/ubuntu/Coding/emsdk/upstream/emscripten/cache/sysroot/include/**"
             ],
             "defines": [
                 "PLATFORM=Web"
