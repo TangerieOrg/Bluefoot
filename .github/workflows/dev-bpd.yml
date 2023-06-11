@@ -23,5 +23,4 @@ jobs:
     with:
       image_name: bluefootdev
       registry_name: docker.tangerie.xyz
-      compose_file_path: docker-compose-dev.yml
     secrets: inherit

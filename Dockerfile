@@ -13,13 +13,13 @@ WORKDIR /app
 
 COPY ./web/package.json ./
 
-RUN npm i 
+RUN NODE_ENV=development npm i 
 
 COPY ./web ./
 
 COPY --from=build-cpp /app/web/res /app/res
 
-RUN npm run build
+RUN NODE_ENV=development npm run build
 
 FROM nginx:alpine
 
