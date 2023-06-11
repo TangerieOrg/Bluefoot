@@ -1,5 +1,5 @@
 #pragma once
-#include "structs.hpp"
+#include "noodle/structs.hpp"
 #include <string>
 
 namespace Noodle::Utils {

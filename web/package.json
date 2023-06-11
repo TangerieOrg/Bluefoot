@@ -4,11 +4,9 @@
   "description": "",
   "scripts": {
     "start": "parcel public/index.html",
-    "build-parcel": "parcel build public/index.html",
-    "storybook": "storybook dev -p 6006 --no-open",
-    "build-storybook": "storybook build -o dist/storybook && echo '<base href=\"/storybook/\">' | cat - dist/storybook/index.html > tmp.html && mv tmp.html dist/storybook/index.html",
-    "build": "npm run build-parcel && npm run build-storybook",
-    "clean": "rimraf dist .parcel-cache"
+    "build": "parcel build public/index.html",
+    "clean": "rimraf dist .parcel-cache",
+    "postinstall": "rimraf node_modules/react node_modules/react-dom"
   },
   "keywords": [],
   "author": "Tangerie <josh.cavill01@gmail.com> (https://github.com/Tangerie)",
@@ -46,30 +44,26 @@
     "postcss": "^8.4.16",
     "preact": "^10.11.0",
     "react-inlinesvg": "^3.0.1",
+    "react-json-pretty": "^2.2.0",
     "react-router-dom": "^6.4.0",
     "rimraf": "^3.0.2",
     "simple-icons": "^7.11.0",
     "sort-by": "^1.2.0",
-    "tailwindcss": "^3.1.8",
-    "typescript": "^4.8.3"
+    "tailwindcss": "^3.1.8"
   },
   "devDependencies": {
-    "@storybook-extras/console": "^0.0.68",
-    "@storybook/addon-actions": "^7.0.7",
-    "@storybook/addon-essentials": "^7.0.7",
-    "@storybook/addon-interactions": "^7.0.7",
-    "@storybook/addon-links": "^7.0.7",
-    "@storybook/addon-mdx-gfm": "^7.0.7",
-    "@storybook/addon-styling": "^1.0.5",
-    "@storybook/blocks": "^7.0.7",
-    "@storybook/preact": "^7.0.7",
-    "@storybook/preact-webpack5": "^7.0.7",
-    "@storybook/testing-library": "^0.0.14-next.2",
+    "@parcel/resolver-glob": "^2.8.3",
+    "@parcel/transformer-inline-string": "^2.8.3",
+    "buffer": "^5.7.1",
     "cross-env": "^7.0.3",
+    "crypto-browserify": "^3.12.0",
     "css-loader": "^6.7.3",
-    "storybook": "^7.0.7",
-    "storybook-css-modules": "^1.0.8",
-    "storybook-dark-mode": "^3.0.0",
-    "style-loader": "^3.3.2"
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "style-loader": "^3.3.2",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.0.4"
   }
 }

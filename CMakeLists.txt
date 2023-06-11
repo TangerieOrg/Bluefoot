@@ -11,9 +11,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/web/res")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/web/res")
 
-set(COMMON_C_CXX_FLAGS "-sUSE_GLFW=3 -sASSERTIONS=1 -sWASM=1 -sASYNCIFY -sALLOW_MEMORY_GROWTH=1 -sMODULARIZE=1 -sENVIRONMENT=web -sEXPORTED_RUNTIME_METHODS=ccall,cwrap,run -sEXIT_RUNTIME=1 -Wno-limited-postlink-optimizations -DPLATFORM=Web -lembind")
-set(COMMON_C_CXX_FLAGS_RELEASE "-O3")
-set(COMMON_C_CXX_FLAGS_DEBUG "-g")
+set(EM_EXPORTED_RUNTIME_METHODS "ccall,cwrap,addFunction,Emval")
+
+set(COMMON_C_CXX_FLAGS "-sUSE_GLFW=3 -sASSERTIONS=1 -sWASM=1 -sALLOW_MEMORY_GROWTH=1 -sALLOW_TABLE_GROWTH=1 -O3 -sMODULARIZE=1 -sASYNCIFY=1 -sENVIRONMENT=web -sEXPORTED_RUNTIME_METHODS=${EM_EXPORTED_RUNTIME_METHODS} -sEXIT_RUNTIME=0 -Wno-limited-postlink-optimizations -DPLATFORM=Web -lembind --js-library ${CMAKE_SOURCE_DIR}/Noodle/lib.js")
+set(COMMON_C_CXX_FLAGS_RELEASE "")
+set(COMMON_C_CXX_FLAGS_DEBUG "")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMMON_C_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_C_CXX_FLAGS}")
@@ -29,8 +31,7 @@ add_compile_options(
     "-Wno-unused-command-line-argument" 
     "-Wno-deprecated-enum-compare-conditional" 
     "-Wno-limited-postlink-optimizations"
-    # TODO How to remove in prod?
-    "-g"
+    "-Wno-switch"
 )
 
 add_subdirectory(lib)

@@ -4,14 +4,8 @@
 
 #include "entry.hpp"
 #include "ui/consolewindow.hpp"
+#include "screen/displaymanager.hpp"
 // These functions should not be used internally
-
-extern "C" {
-    EMSCRIPTEN_KEEPALIVE
-    void start() {
-        Entry::start();
-    }
-}
 
 void console_log(std::string str) {
     UI::ConsoleWindow::getInstance().add_line(str);
@@ -20,4 +14,6 @@ void console_log(std::string str) {
 EMSCRIPTEN_BINDINGS(bluefoot) {
     emscripten::function("end", &Entry::end);
     emscripten::function("console_log", &console_log);
+    emscripten::function("force_canvas_resize", &force_canvas_resize);
+    emscripten::function("start", &Entry::start);
 }

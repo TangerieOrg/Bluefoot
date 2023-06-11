@@ -1,0 +1,53 @@
+/*
+A graph is a collection of nodes and connections.
+This setup is very likely to change.
+Extra graph data may be added with other keys (e.g for UI)
+
+TODO => Add dynamic nodes for setting vars etc.
+*/
+
+graph exampleGraph {
+    /*
+    All nodes are defined here as, the inputs and values are for unconnected pins with non-default values
+    <id> <type> {
+        <input> <value>;
+    }
+    */
+    nodes {
+        onKeyEvent_0 onKeyEvent {}
+        stringLength_0 stringLength {}
+        numberToString_0 numberToString {
+            round false;
+        }
+        logString_0 logString {}
+    }
+
+    /*
+    Connections are defined here as "<from> <to>;" where <from> and <to> is "<node_id>.<pin>"
+    */
+    connections {
+        onKeyEvent_0.pressed numberToString_0.execution;
+        onKeyEvent_0.key stringLength_0.string;
+        stringLength_0.length numberToString_0.number;
+        numberToString_0.then logString_0.execute;
+        numberToString_0.string logString_0.string;
+    }
+
+    /*
+    Variables are defined the same as pins on nodes
+    */
+    variables {
+        Number count(0);
+    }
+
+    /*
+    This would be an example entry for the UI to save node positions.
+    "<node_id> <x> <y>;"
+    */
+    positions {
+        onKeyEvent_0 -40 20;
+        stringLength_0 200 200;
+        numberToString_0 450 20;
+        logString_0 725 20;
+    }
+}

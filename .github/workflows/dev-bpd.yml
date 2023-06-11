@@ -5,6 +5,9 @@ on:
     branches: [ "dev" ]
   workflow_dispatch:
 
+env:
+  SERVER_PREFIX: "bluefootdev"
+
 jobs:
   build:
     uses: ./.github/workflows/docker-build-push.yml

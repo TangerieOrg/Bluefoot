@@ -1,14 +1,25 @@
 import GameCanvas from "@components/GameCanvas";
 import Overlay from "@components/Overlay";
+import { BluefootContextProvider } from "@Bluefoot";
 import { OverlayStateProvider, useOverlayState } from "@modules/OverlayManager";
 import withHOCs from "@modules/Util/withHOCs";
 import NoodleEditor from "@overlays/NoodleEditor";
+import ParserOverlay from "@overlays/NoodleEditor/ParserOverlay";
 import { useEffect } from "preact/hooks";
+
+if (process.env.NODE_ENV==='development') {
+    // Must use require here as import statements are only allowed
+    // to exist at top-level.
+    require("preact/debug");
+}
+
+window.bluefoot = {};
 
 function App() {
     const { setCurrent } = useOverlayState();
 
     useEffect(() => {
+        // setCurrent(ParserOverlay);
         setCurrent(NoodleEditor);
     }, []);
 
@@ -23,4 +34,4 @@ function App() {
     )
 }
 
-export default withHOCs(App, OverlayStateProvider);
+export default withHOCs(App, BluefootContextProvider, OverlayStateProvider);

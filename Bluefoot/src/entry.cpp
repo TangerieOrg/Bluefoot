@@ -4,7 +4,9 @@
 #include <stdio.h>
 
 #include <emscripten/emscripten.h>
+#include <emscripten/val.h>
 #include <emscripten/html5.h>
+#include <emscripten/bind.h>
 #include "raylib.h"
 
 #include "entry.hpp"
@@ -17,7 +19,7 @@
 #include <iostream>
 #include <streambuf>
 
-#include "node/pin.hpp"
+#include "noodle/parser/parser.hpp"
 
 void NullLogger(int msgType, const char *text, va_list args) {}
 
@@ -25,30 +27,25 @@ void drawFPS() {
     DrawText(TextFormat("%i", GetFPS()), 15, 15, 30, WHITE);
 }
 
-int frameCount = 0;
-
 void draw() {
     UI::ConsoleWindow::getInstance().draw();
     drawFPS();
-    frameCount++;
 }
 
 namespace Entry {
 void start() {
     SetTraceLogCallback(NullLogger);
-    // Its required for some reason
-    emscripten_sleep(1);
-    debug("Bluefoot Starting...");
+    printf("Bluefoot Starting...\n");
+
     DisplayManager::getInstance().init(Vector2{1920, 1080}, 1);
     
     DisplayManager::getInstance().startLoop(draw);
-
-    CloseWindow();
 }
 
 void end() {
     debug("Bluefoot Ending...\n");
     rlImGuiShutdown();
     DisplayManager::getInstance().endLoop();
+    CloseWindow();
 }
 }
