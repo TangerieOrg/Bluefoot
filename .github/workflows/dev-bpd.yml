@@ -6,19 +6,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    uses: ./.github/workflows/docker-build-push.yml
-    with:
-      image_name: bluefootdev
-      registry_name: docker.tangerie.xyz
-      ref: dev
-    secrets: inherit
-    
   deploy:
-    uses: ./.github/workflows/docker-deploy.yml
-    needs: build
+    uses: TangerieOrg/Workflows/.github/workflows/compose-deploy.yml@main
     with:
-      image_name: bluefootdev
-      registry_name: docker.tangerie.xyz
-      compose_file_path: docker-compose-dev.yml
+      project: bluefootdev
+      compose_file: docker-compose-dev.yml
+      ref: dev
     secrets: inherit

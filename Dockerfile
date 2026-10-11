@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.tangerie.xyz/webraylib:latest as build-cpp
+FROM --platform=$BUILDPLATFORM ghcr.io/tangerieorg/webraylib:latest as build-cpp
 
 WORKDIR /app
 

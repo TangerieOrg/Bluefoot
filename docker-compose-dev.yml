@@ -1,8 +1,22 @@
-version: '3'
+name: bluefootdev
+
 services:
   eugine:
-    ports:
-      - 8802:3000
-    image: ${IMAGE_NAME}:latest
-    deploy:
-      replicas: 1
+    build: .
+    image: bluefootdev-eugine:latest
+    pull_policy: never
+    restart: unless-stopped
+    networks:
+      - traefik-proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-proxy"
+      - "traefik.http.routers.bluefootdev.rule=Host(`bluefootdev.tangerie.xyz`)"
+      - "traefik.http.routers.bluefootdev.entrypoints=websecure"
+      - "traefik.http.routers.bluefootdev.priority=1000"
+      - "traefik.http.routers.bluefootdev.middlewares=cors-bluefoot@file"
+      - "traefik.http.services.bluefootdev.loadbalancer.server.port=3000"
+
+networks:
+  traefik-proxy:
+    external: true
