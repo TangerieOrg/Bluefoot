@@ -5,22 +5,10 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
-env:
-  SERVER_PREFIX: "bluefoot"
-
 jobs:
-  build:
-    uses: ./.github/workflows/docker-build-push.yml
-    with:
-      image_name: bluefoot
-      registry_name: docker.tangerie.xyz
-      ref: main
-    secrets: inherit
-    
   deploy:
-    uses: ./.github/workflows/docker-deploy.yml
-    needs: build
+    uses: TangerieOrg/Workflows/.github/workflows/compose-deploy.yml@main
     with:
-      image_name: bluefoot
-      registry_name: docker.tangerie.xyz
+      project: bluefoot
+      ref: main
     secrets: inherit
